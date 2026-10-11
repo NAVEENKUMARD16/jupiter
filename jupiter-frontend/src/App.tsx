@@ -119,9 +119,9 @@ const AppContent: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/index.html" element={<Navigate to="/" replace />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/about.html" element={<Navigate to="/about" replace />} />
-        <Route path="/about-us" element={<Navigate to="/about" replace />} />
+        <Route path="/about-us" element={<AboutPage />} />
+        <Route path="/about" element={<Navigate to="/about-us" replace />} />
+        <Route path="/about.html" element={<Navigate to="/about-us" replace />} />
         <Route path="/machines" element={<Navigate to="/products" replace />} />
         <Route path="/products" element={<ProductsPage />} />
 
@@ -141,12 +141,14 @@ const AppContent: React.FC = () => {
         <Route path="/machine-spares" element={<Navigate to="/products/machine-spares" replace />} />
         <Route path="/spares" element={<Navigate to="/products/machine-spares" replace />} />
 
-        <Route path="/gallery" element={<Navigate to="/projects" replace />} />
-        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/gallery" element={<ProjectsPage />} />
+        <Route path="/projects" element={<Navigate to="/gallery" replace />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<BlogPage />} />
         <Route path="/blogs" element={<Navigate to="/blog" replace />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/contact-us" element={<ContactPage />} />
+        <Route path="/contact" element={<Navigate to="/contact-us" replace />} />
+        <Route path="/Contact-us" element={<Navigate to="/contact-us" replace />} />
 
         {/* Legal & Utility Pages */}
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

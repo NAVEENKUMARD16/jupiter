@@ -84,11 +84,11 @@ export const Footer: React.FC = () => {
             <h4 className="footer-col-title">QUICK LINKS</h4>
             <ul className="footer-links-list">
               <li><Link to="/" className="footer-link-anchor">Home</Link></li>
-              <li><Link to="/about" className="footer-link-anchor">About Us</Link></li>
+              <li><Link to="/about-us" className="footer-link-anchor">About Us</Link></li>
               <li><Link to="/products" className="footer-link-anchor">Machines</Link></li>
-              <li><Link to="/projects" className="footer-link-anchor">Gallery & Projects</Link></li>
+              <li><Link to="/gallery" className="footer-link-anchor">Gallery & Projects</Link></li>
               <li><Link to="/blog" className="footer-link-anchor">Blog & Guides</Link></li>
-              <li><Link to="/contact" className="footer-link-anchor">Contact Us</Link></li>
+              <li><Link to="/contact-us" className="footer-link-anchor">Contact Us</Link></li>
             </ul>
           </div>
 

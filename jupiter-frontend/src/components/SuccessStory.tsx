@@ -205,7 +205,7 @@ export const SuccessStory: React.FC = () => {
                   – {current.author} ({current.location})
                 </div>
 
-                <Link to="/projects" className="btn btn-orange" style={{ width: '100%', justifyContent: 'center', padding: '12px 24px', borderRadius: '10px' }}>
+                <Link to="/gallery" className="btn btn-orange" style={{ width: '100%', justifyContent: 'center', padding: '12px 24px', borderRadius: '10px' }}>
                   <span>See All Case Studies</span>
                   <ArrowRight size={18} />
                 </Link>

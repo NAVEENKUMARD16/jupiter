@@ -76,7 +76,7 @@ export const FAQSection: React.FC = () => {
             </p>
           </div>
 
-          <Link to="/contact" className="btn btn-orange">
+          <Link to="/contact-us" className="btn btn-orange">
             <span>Talk to a Jupiter Machinery Expert</span>
             <ArrowRight size={16} />
           </Link>

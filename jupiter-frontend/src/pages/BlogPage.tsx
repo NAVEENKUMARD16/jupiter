@@ -156,7 +156,7 @@ const BlogComingSoon: React.FC = () => (
       {/* CTAs */}
       <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
         <Link
-          to="/contact"
+          to="/contact-us"
           className="btn btn-orange"
           style={{ padding: '13px 32px', fontWeight: 700, fontSize: '0.97rem' }}
         >
@@ -438,7 +438,7 @@ export const BlogPage: React.FC = () => {
                 Contact our factory engineering team to discuss your capacity requirements and receive a customized turnkey quote.
               </p>
               <Link
-                to="/contact"
+                to="/contact-us"
                 className="btn btn-orange"
                 style={{
                   padding: '12px 28px',

@@ -323,7 +323,7 @@ export const ServiceNetwork: React.FC = () => {
             </a>
 
             <Link
-              to="/contact"
+              to="/contact-us"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',

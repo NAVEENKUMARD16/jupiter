@@ -6,7 +6,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://jupitergroups.in/about</loc>
+    <loc>https://jupitergroups.in/about-us</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -51,7 +51,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jupitergroups.in/projects</loc>
+    <loc>https://jupitergroups.in/gallery</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -61,7 +61,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jupitergroups.in/contact</loc>
+    <loc>https://jupitergroups.in/contact-us</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>

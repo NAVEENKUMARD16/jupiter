@@ -20,16 +20,17 @@ import { validateName, validatePhone, validateEmail } from '../utils/validation'
 
 export const ContactPage: React.FC = () => {
   useSeoMeta({
-    title: 'Contact Jupiter Industries | Get a Free Machinery Quote',
-    description: 'Contact Jupiter Industries for machinery inquiries, pricing, and installation support. Call us or send an enquiry – we serve customers across all of India from Coimbatore, Tamil Nadu.',
-    keywords: 'Contact Jupiter Industries, Machinery Quote Request, Brick Machine Enquiry, Industrial Equipment Supplier Contact, Coimbatore Machinery Manufacturer Phone',
-    canonical: 'https://jupitergroups.in/contact',
-    ogUrl: 'https://jupitergroups.in/contact',
+    title: 'Contact Jupiter Industries | Brick Making Machine Manufacturer',
+    description: 'Contact Jupiter Industries, a brick making machine manufacturer in Coimbatore, Tamil Nadu. Enquire about fly ash brick, block, interlock and paver block machines.',
+    keywords: 'Contact Jupiter Industries, Brick Making Machine Manufacturer Coimbatore, Fly Ash Brick Machine Price, Hollow Block Machine Manufacturer, Paver Block Machine Tamil Nadu, Jupiter Industries Phone',
+    canonical: 'https://jupitergroups.in/contact-us',
+    ogUrl: 'https://jupitergroups.in/contact-us',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'ContactPage',
-      'name': 'Contact Jupiter Industries',
-      'url': 'https://jupitergroups.in/contact',
+      'name': 'Contact Jupiter Industries | Brick Making Machine Manufacturer',
+      'url': 'https://jupitergroups.in/contact-us',
+      'description': 'Contact Jupiter Industries, a brick making machine manufacturer in Coimbatore, Tamil Nadu. Enquire about fly ash brick, block, interlock and paver block machines.',
       'mainEntity': {
         '@type': 'LocalBusiness',
         'name': 'Jupiter Industries',
@@ -170,6 +171,27 @@ export const ContactPage: React.FC = () => {
       {/* 2. MAIN 2-COLUMN SECTION: SEND AN ENQUIRY + 4 CONTACT CARDS */}
       <section className="section-padding contact-main-body-section bg-white">
         <div className="container">
+          {/* Section Header matching site's standard typography from screenshot */}
+          <div className="contact-section-header">
+            <div className="contact-section-eyebrow">
+              WHY CHOOSE JUPITER INDUSTRIES?
+            </div>
+            <h2 className="contact-section-title">
+              Get in Touch with a Brick Making Machine Manufacturer in Coimbatore
+            </h2>
+            <div className="contact-section-description">
+              <p className="contact-section-lead">
+                Looking for reliable brick making machines or concrete block manufacturing machinery? Contact Jupiter Industries, based in Coimbatore, Tamil Nadu, for product information, technical specifications, machine pricing, and quotation requests.
+              </p>
+              <p className="contact-section-body">
+                Our machinery range includes fly ash brick making machines, hollow and solid block machines, interlock brick machines, paver block machines, batching plants, storage silos, and machine spares.
+              </p>
+              <p className="contact-section-body">
+                Whether you are planning a new brick manufacturing unit or upgrading your existing production facility, our team can help you explore suitable machinery solutions.
+              </p>
+            </div>
+          </div>
+
           <div className="contact-two-column-grid">
             {/* Left Column: Dark Navy Enquiry Form */}
             <div className="contact-dark-enquiry-card">

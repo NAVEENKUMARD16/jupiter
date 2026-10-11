@@ -14,17 +14,17 @@ import {
 export const ProductsPage: React.FC = () => {
   const navigate = useNavigate();
   useSeoMeta({
-    title: 'Brick Making Machines & Block Machines | Jupiter Industries',
-    description: 'Explore Jupiter Industries’ 5G, Fly Ash, Interlock Brick, Paver Block, Concrete Block and Hollow & Solid Block Making Machines for reliable brick production.',
-    keywords: 'Buy Fly Ash Brick Machine, Block Making Machine Price India, Paver Block Plant, Batching Plant Manufacturer, Machine Spares, Jupiter Industries Products',
+    title: 'Brick & Block Making Machines | Jupiter Industries',
+    description: 'Explore Jupiter Industries’ range of 5G brick making machines, fly ash brick machines, interlock block machines, paver block machines and concrete block machinery',
+    keywords: 'Brick & Block Making Machines, 5G Brick Machine, Fly Ash Brick Machine, Interlock Block Machine, Paver Block Machine, Concrete Block Machinery, Jupiter Industries Products',
     canonical: 'https://jupitergroups.in/products',
     ogUrl: 'https://jupitergroups.in/products',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      'name': 'Brick Making Machines & Block Machines',
+      'name': 'Brick & Block Making Machines | Jupiter Industries',
       'url': 'https://jupitergroups.in/products',
-      'description': 'Full product line of industrial brick making machines, concrete block machines, paver block machines, batching plants, silos, and machine spares.',
+      'description': 'Explore Jupiter Industries’ range of 5G brick making machines, fly ash brick machines, interlock block machines, paver block machines and concrete block machinery',
       'publisher': {
         '@type': 'Organization',
         'name': 'Jupiter Industries',
@@ -132,12 +132,12 @@ export const ProductsPage: React.FC = () => {
       <section className="section-padding bg-white" style={{ paddingTop: '60px', paddingBottom: '70px' }}>
         <div className="container">
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 36px auto' }}>
+          <div style={{ textAlign: 'center', maxWidth: '960px', margin: '0 auto 40px auto' }}>
             <span style={{
               display: 'inline-block',
               color: '#EA580C',
               fontSize: '0.85rem',
-              fontWeight: 600,
+              fontWeight: 800,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               marginBottom: '8px'
@@ -148,19 +148,37 @@ export const ProductsPage: React.FC = () => {
               fontSize: 'clamp(2rem, 3.2vw, 2.7rem)',
               fontWeight: 900,
               color: '#00233D',
-              marginBottom: '12px',
+              marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
               Brick Making Machines & Block Making Machinery
             </h2>
-            <p style={{
-              color: '#5A6E85',
-              fontSize: '1.05rem',
-              lineHeight: 1.6,
-              margin: '0 auto'
-            }}>
-              Explore Jupiter Industries’ range of brick making machines and block making machines designed for reliable and consistent production. We manufacture and supply 5G Brick Making Machines, Fly Ash Brick Making Machines, Interlock Brick Machines, Paver Block Machines, Concrete Block Machines and Hollow & Solid Block Machines for brick and block manufacturers across India.
-            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', textAlign: 'center' }}>
+              <p style={{
+                color: '#334155',
+                fontSize: '1.04rem',
+                lineHeight: 1.7,
+                margin: 0
+              }}>
+                Discover industrial machinery engineered to support modern brick and concrete block manufacturing. Jupiter Industries offers a comprehensive range of production equipment, including 5G Brick Making Machines, Fly Ash Brick Making Machines, Interlock Block Machines, Paver Block Machines, Concrete Block Machines, and Hollow & Solid Block Machines.
+              </p>
+              <p style={{
+                color: '#5A6E85',
+                fontSize: '0.98rem',
+                lineHeight: 1.65,
+                margin: 0
+              }}>
+                From high-speed brick production systems to specialised block manufacturing equipment, our product range serves diverse production requirements across the construction industry. Explore our machine models, compare technical specifications and production capacities, and find the right equipment for your manufacturing operations.
+              </p>
+              <p style={{
+                color: '#5A6E85',
+                fontSize: '0.98rem',
+                lineHeight: 1.65,
+                margin: 0
+              }}>
+                Browse our products to learn more about each machine and contact Jupiter Industries for technical information, product recommendations and quotations.
+              </p>
+            </div>
           </div>
 
           {/* Filter Pills in Responsive Row / Scroll */}
@@ -229,7 +247,7 @@ export const ProductsPage: React.FC = () => {
                 <p style={{ color: '#64748B', maxWidth: '440px', margin: '0 auto 24px', fontSize: '0.92rem', lineHeight: 1.5 }}>
                   Machinery products for this selection will be displayed as soon as they are added in the catalog.
                 </p>
-                <Link to="/contact" className="btn btn-orange">
+                <Link to="/contact-us" className="btn btn-orange">
                   <span>Enquire Machinery Custom Specs</span>
                   <ArrowRight size={16} />
                 </Link>

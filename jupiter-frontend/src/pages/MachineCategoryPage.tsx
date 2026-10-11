@@ -543,7 +543,7 @@ export const MachineCategoryPage: React.FC = () => {
               <p style={{ color: '#64748B', maxWidth: '440px', margin: '0 auto 20px', fontSize: '0.92rem' }}>
                 We engineer custom configurations according to your daily production capacity.
               </p>
-              <Link to="/contact" className="btn btn-orange">
+              <Link to="/contact-us" className="btn btn-orange">
                 <span>Request Custom Machinery Quote</span>
               </Link>
             </div>

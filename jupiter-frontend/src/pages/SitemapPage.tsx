@@ -25,11 +25,11 @@ export const SitemapPage: React.FC = () => {
       icon: Home,
       links: [
         { label: 'Home Page', path: '/', desc: 'Primary landing page, featured machinery highlights & client stats.' },
-        { label: 'About Jupiter Industries', path: '/about', desc: 'Company history, 6-stage manufacturing process & ISO certification.' },
+        { label: 'About Jupiter Industries', path: '/about-us', desc: 'Company history, 6-stage manufacturing process & ISO certification.' },
         { label: 'Machinery Catalog', path: '/products', desc: 'Full range of fly ash, block, paver, and batching plant machinery.' },
-        { label: 'Projects & Gallery', path: '/projects', desc: 'Live plant installation photos, video demonstrations & customer stories.' },
+        { label: 'Projects & Gallery', path: '/gallery', desc: 'Live plant installation photos, video demonstrations & customer stories.' },
         { label: 'Blogs & Engineering Guides', path: '/blog', desc: 'Technical guides on fly ash brick manufacturing & block production.' },
-        { label: 'Contact Us', path: '/contact', desc: 'Factory location map, phone numbers, email addresses & enquiry form.' },
+        { label: 'Contact Us', path: '/contact-us', desc: 'Factory location map, phone numbers, email addresses & enquiry form.' },
       ]
     },
     {

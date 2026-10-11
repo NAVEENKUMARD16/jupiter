@@ -120,8 +120,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           </Link>
 
           <Link 
-            to="/about" 
-            className={`nav-link-item ${location.pathname === '/about' ? 'active' : ''}`}
+            to="/about-us" 
+            className={`nav-link-item ${location.pathname === '/about-us' || location.pathname === '/about' ? 'active' : ''}`}
           >
             About
           </Link>
@@ -217,8 +217,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           </Link>
 
           <Link 
-            to="/contact" 
-            className={`nav-link-item ${location.pathname === '/contact' ? 'active' : ''}`}
+            to="/contact-us" 
+            className={`nav-link-item ${location.pathname === '/contact-us' || location.pathname === '/contact' ? 'active' : ''}`}
           >
             Contact
           </Link>
@@ -259,8 +259,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           </Link>
 
           <Link 
-            to="/about" 
-            className={`nav-link-item ${location.pathname === '/about' ? 'active' : ''}`}
+            to="/about-us" 
+            className={`nav-link-item ${location.pathname === '/about-us' || location.pathname === '/about' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             About
@@ -341,8 +341,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           </Link>
 
           <Link 
-            to="/contact" 
-            className={`nav-link-item ${location.pathname === '/contact' ? 'active' : ''}`}
+            to="/contact-us" 
+            className={`nav-link-item ${location.pathname === '/contact-us' || location.pathname === '/contact' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Contact

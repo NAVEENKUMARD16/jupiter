@@ -9,17 +9,17 @@ import { PageBanner } from '../components/PageBanner';
 
 export const ProjectsPage: React.FC = () => {
   useSeoMeta({
-    title: 'Brick Making Machine Videos & Gallery | Jupiter Industries',
-    description: 'Watch Jupiter Industries’ brick making machine videos, including 5G, fly ash brick, interlock brick, paver block and concrete block machine demonstrations.',
-    keywords: 'Jupiter Industries Projects, Brick Machine Installation Gallery, Block Machine Videos India, Industrial Machinery Site Work, Fly Ash Machine Customer Projects',
-    canonical: 'https://jupitergroups.in/projects',
-    ogUrl: 'https://jupitergroups.in/projects',
+    title: 'Brick & Block Making Machine Gallery | Jupiter Industries',
+    description: 'Explore photos and videos of Jupiter Industries’ fly ash brick machines, concrete block machines, paver block machines, batching plants, storage silos and industrial machinery.',
+    keywords: 'Brick & Block Making Machine Gallery, Jupiter Industries Gallery, Fly Ash Machine Photos, Concrete Block Machine Videos, Paver Block Machine Tamil Nadu, Industrial Machinery Showcase',
+    canonical: 'https://jupitergroups.in/gallery',
+    ogUrl: 'https://jupitergroups.in/gallery',
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'MediaGallery',
-      'name': 'Jupiter Industries Projects & Video Showcase',
-      'url': 'https://jupitergroups.in/projects',
-      'description': 'Live video demonstrations and installation photo gallery of industrial brick and block machinery.',
+      'name': 'Brick & Block Making Machine Gallery | Jupiter Industries',
+      'url': 'https://jupitergroups.in/gallery',
+      'description': 'Explore photos and videos of Jupiter Industries’ fly ash brick machines, concrete block machines, paver block machines, batching plants, storage silos and industrial machinery.',
       'publisher': {
         '@type': 'Organization',
         'name': 'Jupiter Industries',
@@ -86,6 +86,24 @@ export const ProjectsPage: React.FC = () => {
       {/* DUAL OPTION SWITCHER SECTION (WHITE BACKGROUND) */}
       <section className="section-padding" style={{ background: '#FFFFFF', paddingTop: '40px', paddingBottom: '70px' }}>
         <div className="container">
+          {/* Gallery Page Section Header matching site's standard typography */}
+          <div className="contact-section-header" style={{ marginBottom: '38px' }}>
+            <div className="contact-section-eyebrow">
+              WHY CHOOSE JUPITER INDUSTRIES?
+            </div>
+            <h2 className="contact-section-title">
+              Brick Making Machines Gallery
+            </h2>
+            <div className="contact-section-description">
+              <p className="contact-section-lead">
+                Explore the Jupiter Industries gallery to see our brick making machines, concrete block manufacturing equipment, machinery installations and product demonstrations. Browse machine photographs and videos to understand our equipment, manufacturing capabilities and applications.
+              </p>
+              <p className="contact-section-body">
+                As a manufacturer of brick and concrete machinery in Coimbatore, Tamil Nadu, Jupiter Industries provides equipment solutions for businesses involved in brick production, concrete block manufacturing, interlocking blocks and paver block production.
+              </p>
+            </div>
+          </div>
+
           {/* Main 2-Option Tabs Switcher */}
           <div className="gallery-tab-switcher-wrap">
             <div className="gallery-tab-switcher" role="tablist">
@@ -368,7 +386,7 @@ export const ProjectsPage: React.FC = () => {
 
           {/* Bottom Call to Action */}
           <div style={{ marginTop: '50px', textAlign: 'center' }}>
-            <Link to="/contact" className="btn btn-orange" style={{ padding: '14px 32px' }}>
+            <Link to="/contact-us" className="btn btn-orange" style={{ padding: '14px 32px' }}>
               <span>Request Machinery Quotation</span>
               <ArrowRight size={18} />
             </Link>

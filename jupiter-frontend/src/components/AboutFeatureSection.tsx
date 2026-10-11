@@ -141,7 +141,7 @@ export const AboutFeatureSection: React.FC = () => {
             </p>
 
             <Link 
-              to="/about" 
+              to="/about-us" 
               className="btn btn-orange"
               style={{
                 padding: '14px 28px',

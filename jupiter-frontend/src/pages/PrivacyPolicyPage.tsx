@@ -135,7 +135,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             </div>
 
             <div style={{ marginTop: '36px', textAlign: 'center' }}>
-              <Link to="/contact" className="btn btn-orange" style={{ padding: '12px 28px' }}>
+              <Link to="/contact-us" className="btn btn-orange" style={{ padding: '12px 28px' }}>
                 <span>Contact Engineering Team</span>
               </Link>
             </div>

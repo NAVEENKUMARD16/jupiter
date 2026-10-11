@@ -84,20 +84,22 @@ export const normalizeCanonicalUrl = (rawUrl?: string): string => {
   // Standardize aliases to preferred canonical sitemap paths
   if (path === '' || path === '/home' || path === '/index') {
     path = '/';
-  } else if (path === '/about-us') {
-    path = '/about';
+  } else if (path === '/about') {
+    path = '/about-us';
   } else if (path === '/machines') {
     path = '/products';
   } else if (path.startsWith('/machines/')) {
     path = path.replace('/machines/', '/products/');
-  } else if (path === '/gallery') {
-    path = '/projects';
+  } else if (path === '/projects') {
+    path = '/gallery';
   } else if (path === '/blogs') {
     path = '/blog';
   } else if (path === '/privacy') {
     path = '/privacy-policy';
   } else if (path === '/terms') {
     path = '/terms-and-conditions';
+  } else if (path === '/contact') {
+    path = '/contact-us';
   } else if (
     [
       '/fly-ash-brick-machine',
