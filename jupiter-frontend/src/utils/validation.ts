@@ -13,10 +13,16 @@ export const validateName = (name: string): ValidationResult => {
     return { isValid: false, error: 'Full name is required.' };
   }
   if (trimmed.length < 2) {
-    return { isValid: false, error: 'Name must be at least 2 characters.' };
+    return { isValid: false, error: 'Full name must be at least 2 characters.' };
   }
-  if (!/^[a-zA-Z\s.'-]+$/.test(trimmed)) {
-    return { isValid: false, error: 'Name can only contain letters, spaces, and dots.' };
+  if (/\d/.test(trimmed)) {
+    return { isValid: false, error: 'Full name cannot contain numbers. Please enter alphabetic characters only.' };
+  }
+  if (!/[a-zA-Z]/.test(trimmed)) {
+    return { isValid: false, error: 'Full name must contain alphabetic letters.' };
+  }
+  if (!/^[a-zA-Z\s.'’-]+$/.test(trimmed)) {
+    return { isValid: false, error: 'Full name can only contain letters, spaces, hyphens, and apostrophes.' };
   }
   return { isValid: true };
 };

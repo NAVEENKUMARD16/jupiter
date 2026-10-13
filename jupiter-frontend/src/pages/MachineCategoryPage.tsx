@@ -213,6 +213,7 @@ export const MachineCategoryPage: React.FC = () => {
   // Quote Request Modal State
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [selectedMachineName, setSelectedMachineName] = useState('');
+  const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
 
   // Quick Enquiry Form State
   const [formData, setFormData] = useState({
@@ -373,10 +374,40 @@ export const MachineCategoryPage: React.FC = () => {
   };
 
   // Quote Modal Handlers
+  const resetQuoteForm = () => {
+    setFormData({
+      name: '',
+      countryCode: '+91',
+      phone: '',
+      email: '',
+      message: ''
+    });
+    setFormErrors({});
+    setStatusMessage(null);
+    setIsSubmittedSuccess(false);
+  };
+
   const handleOpenQuote = (machineName?: string) => {
+    resetQuoteForm();
     setSelectedMachineName(machineName || activeMachine?.name || categoryData.name);
     setQuoteModalOpen(true);
   };
+
+  const handleCloseQuote = () => {
+    setQuoteModalOpen(false);
+    resetQuoteForm();
+  };
+
+  // Close quote modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && quoteModalOpen) {
+        handleCloseQuote();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [quoteModalOpen]);
 
   const handleQuoteSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -409,16 +440,11 @@ export const MachineCategoryPage: React.FC = () => {
         message: `Quotation for: ${selectedMachineName || activeMachine?.name || categoryData.name} | Requirement: ${formData.message}`
       });
 
+      setIsSubmittedSuccess(true);
       setStatusMessage({
         type: 'success',
         text: 'Quotation request submitted! Our factory engineer will contact you shortly with catalog & pricing.'
       });
-      setTimeout(() => {
-        setQuoteModalOpen(false);
-        setStatusMessage(null);
-        setFormData({ name: '', countryCode: '+91', phone: '', email: '', message: '' });
-        setFormErrors({});
-      }, 2000);
     } catch (err: any) {
       setStatusMessage({
         type: 'error',
@@ -917,7 +943,7 @@ export const MachineCategoryPage: React.FC = () => {
 
       {/* 5. Interactive Quotation Request Modal */}
       {quoteModalOpen && (
-        <div className="modal-backdrop-overlay" onClick={() => setQuoteModalOpen(false)}>
+        <div className="modal-backdrop-overlay" onClick={handleCloseQuote}>
           <div className="modal-content-card" style={{ maxWidth: '520px' }} onClick={e => e.stopPropagation()}>
             <div className="modal-header-bar">
               <div>
@@ -931,13 +957,66 @@ export const MachineCategoryPage: React.FC = () => {
               <button
                 type="button"
                 className="modal-close-btn"
-                onClick={() => setQuoteModalOpen(false)}
+                onClick={handleCloseQuote}
                 aria-label="Close modal"
               >
                 <X size={20} />
               </button>
             </div>
 
+            {isSubmittedSuccess ? (
+              <div style={{ padding: '36px 20px', textAlign: 'center', animation: 'fadeIn 0.3s ease' }}>
+                <div style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '50%',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  border: '2px solid #10B981',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 16px',
+                  color: '#10B981'
+                }}>
+                  <CheckCircle2 size={36} />
+                </div>
+                <h4 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '10px' }}>
+                  Quotation Request Submitted!
+                </h4>
+                <p style={{ color: '#CBD5E1', fontSize: '0.92rem', lineHeight: 1.6, maxWidth: '420px', margin: '0 auto 24px' }}>
+                  Thank you! Our factory technical engineers will review your request for <strong>{selectedMachineName}</strong> and contact you shortly with catalog & pricing.
+                </p>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    onClick={handleCloseQuote}
+                    className="btn btn-orange"
+                    style={{ padding: '10px 24px', fontWeight: 700 }}
+                  >
+                    <span>Done</span>
+                  </button>
+                  <a
+                    href="https://wa.me/919342919060"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn"
+                    style={{
+                      background: 'rgba(37, 211, 102, 0.15)',
+                      color: '#25D366',
+                      border: '1px solid rgba(37, 211, 102, 0.4)',
+                      padding: '10px 18px',
+                      fontWeight: 600,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    <WhatsAppIcon size={16} />
+                    <span>Chat on WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+            ) : (
             <form onSubmit={handleQuoteSubmit} className="modal-body-content">
               {statusMessage && (
                 <div className={`form-status-alert ${statusMessage.type}`} style={{ marginBottom: '16px' }}>
@@ -961,10 +1040,20 @@ export const MachineCategoryPage: React.FC = () => {
                   onChange={e => {
                     const val = e.target.value;
                     setFormData(prev => ({ ...prev, name: val }));
-                    if (formErrors.name) {
+                    if (val.trim()) {
                       const v = validateName(val);
-                      setFormErrors(prev => ({ ...prev, name: v.isValid ? undefined : v.error }));
+                      if (!v.isValid && (val.length >= 2 || /\d/.test(val) || /[^a-zA-Z\s.'’-]/.test(val))) {
+                        setFormErrors(prev => ({ ...prev, name: v.error }));
+                      } else if (v.isValid) {
+                        setFormErrors(prev => ({ ...prev, name: undefined }));
+                      }
+                    } else if (formErrors.name) {
+                      setFormErrors(prev => ({ ...prev, name: 'Full name is required.' }));
                     }
+                  }}
+                  onBlur={() => {
+                    const v = validateName(formData.name);
+                    setFormErrors(prev => ({ ...prev, name: v.isValid ? undefined : v.error }));
                   }}
                 />
                 {formErrors.name && (
@@ -1072,6 +1161,7 @@ export const MachineCategoryPage: React.FC = () => {
                 )}
               </button>
             </form>
+            )}
           </div>
         </div>
       )}

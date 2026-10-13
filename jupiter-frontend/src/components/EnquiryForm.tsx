@@ -50,16 +50,22 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({ isModal, onSuccess }) 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    // Name field: strip digits — only letters, spaces, dots, hyphens allowed
-    const sanitized = name === 'name' ? value.replace(/[0-9]/g, '') : value;
-    setFormData((prev) => ({ ...prev, [name]: sanitized }));
-    if (errors[name]) {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'name') {
+      if (value.trim()) {
+        const res = validateName(value);
+        if (!res.isValid && (value.length >= 2 || /\d/.test(value) || /[^a-zA-Z\s.'’-]/.test(value))) {
+          setErrors((prev) => ({ ...prev, name: res.error }));
+        } else if (res.isValid) {
+          setErrors((prev) => ({ ...prev, name: undefined }));
+        }
+      } else if (errors.name) {
+        setErrors((prev) => ({ ...prev, name: 'Full name is required.' }));
+      }
+    } else if (errors[name]) {
       if (name === 'email') {
         const res = validateEmail(value, true);
         setErrors((prev) => ({ ...prev, email: res.isValid ? undefined : res.error }));
-      } else if (name === 'name') {
-        const res = validateName(sanitized);
-        setErrors((prev) => ({ ...prev, name: res.isValid ? undefined : res.error }));
       } else {
         setErrors((prev) => ({ ...prev, [name]: undefined }));
       }
@@ -129,11 +135,25 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({ isModal, onSuccess }) 
               placeholder="e.g. Ramesh Kumar"
               value={formData.name}
               onChange={handleChange}
-              className="custom-input-control"
+              onBlur={() => {
+                const res = validateName(formData.name);
+                setErrors((prev) => ({ ...prev, name: res.isValid ? undefined : res.error }));
+              }}
+              className={`custom-input-control ${errors.name ? 'has-error' : ''}`}
               disabled={loading}
-              style={isModal ? { background: '#F8FAFC', border: '1.5px solid #CBD5E1', color: '#0F172A', borderRadius: '10px' } : undefined}
+              style={isModal ? { 
+                background: errors.name ? '#FFF5F5' : '#F8FAFC', 
+                border: errors.name ? '1.5px solid #EF4444' : '1.5px solid #CBD5E1', 
+                color: '#0F172A', 
+                borderRadius: '10px' 
+              } : undefined}
             />
-            {errors.name && <p className="form-error-msg">{errors.name}</p>}
+            {errors.name && (
+              <p className="form-error-msg" style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '5px', color: '#DC2626', fontSize: '0.82rem', fontWeight: 600 }}>
+                <AlertCircle size={13} />
+                <span>{errors.name}</span>
+              </p>
+            )}
           </div>
 
           {/* Email field */}

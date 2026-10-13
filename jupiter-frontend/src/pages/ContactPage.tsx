@@ -16,6 +16,7 @@ import {
 import { submitEnquiry } from '../services/api';
 import { PageBanner } from '../components/PageBanner';
 import { PhoneInputWithCountry } from '../components/PhoneInputWithCountry';
+import { WhatsAppIcon } from '../components/WhatsAppButton';
 import { validateName, validatePhone, validateEmail } from '../utils/validation';
 
 export const ContactPage: React.FC = () => {
@@ -61,6 +62,8 @@ export const ContactPage: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
+  const enquiryCardRef = React.useRef<HTMLDivElement>(null);
   const statusTimerRef = React.useRef<any>(null);
 
   // Clear timer on component unmount
@@ -102,10 +105,19 @@ export const ContactPage: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    // Name field: strip digits — only letters, spaces, dots, hyphens allowed
-    const sanitized = name === 'name' ? value.replace(/[0-9]/g, '') : value;
-    setFormData((prev) => ({ ...prev, [name]: sanitized }));
-    if (errors[name]) {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'name') {
+      if (value.trim()) {
+        const res = validateName(value);
+        if (!res.isValid && (value.length >= 2 || /\d/.test(value) || /[^a-zA-Z\s.'’-]/.test(value))) {
+          setErrors((prev) => ({ ...prev, name: res.error || '' }));
+        } else if (res.isValid) {
+          setErrors((prev) => ({ ...prev, name: '' }));
+        }
+      } else if (errors.name) {
+        setErrors((prev) => ({ ...prev, name: 'Full name is required.' }));
+      }
+    } else if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
@@ -128,15 +140,16 @@ export const ContactPage: React.FC = () => {
         message: combinedMessage,
       });
 
+      setIsSubmittedSuccess(true);
       setStatusMessage({
         type: 'success',
         text: res.message || 'Quotation request submitted! Our factory engineer will contact you shortly.',
       });
 
-      // Automatically close the popup / alert in 2.5 to 3 seconds as requested
-      statusTimerRef.current = setTimeout(() => {
-        setStatusMessage(null);
-      }, 3000);
+      // Smoothly scroll the card into view so confirmation is fully visible without manual scrolling
+      setTimeout(() => {
+        enquiryCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
 
       setFormData({
         name: '',
@@ -152,9 +165,6 @@ export const ContactPage: React.FC = () => {
         type: 'error',
         text: err.message || 'Unable to submit enquiry right now. Please try calling +91 93429 19060 or WhatsApp us directly.',
       });
-      statusTimerRef.current = setTimeout(() => {
-        setStatusMessage(null);
-      }, 4000);
     } finally {
       setLoading(false);
     }
@@ -194,7 +204,7 @@ export const ContactPage: React.FC = () => {
 
           <div className="contact-two-column-grid">
             {/* Left Column: Dark Navy Enquiry Form */}
-            <div className="contact-dark-enquiry-card">
+            <div className="contact-dark-enquiry-card" ref={enquiryCardRef}>
               <div className="section-pill-dash-title" style={{ marginBottom: '10px' }}>
                 <h2 className="contact-enquiry-card-title">
                   Send an <span className="text-orange">Enquiry</span>
@@ -204,51 +214,116 @@ export const ContactPage: React.FC = () => {
                 Share your requirements and our team will get back to you within 24 hours.
               </p>
 
-              {statusMessage && (
-                <div 
-                  className={`form-status-alert ${statusMessage.type}`} 
-                  style={{ 
-                    marginTop: '16px',
+              {isSubmittedSuccess ? (
+                <div style={{
+                  padding: '44px 20px',
+                  textAlign: 'center',
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  marginTop: '20px',
+                  animation: 'fadeIn 0.35s ease'
+                }}>
+                  <div style={{
+                    width: '68px',
+                    height: '68px',
+                    borderRadius: '50%',
+                    background: 'rgba(16, 185, 129, 0.15)',
+                    border: '2px solid #10B981',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '12px'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {statusMessage.type === 'success' ? (
-                      <CheckCircle2 size={20} style={{ flexShrink: 0 }} />
-                    ) : (
-                      <AlertCircle size={20} style={{ flexShrink: 0 }} />
-                    )}
-                    <span>{statusMessage.text}</span>
+                    justifyContent: 'center',
+                    margin: '0 auto 18px',
+                    color: '#10B981'
+                  }}>
+                    <CheckCircle2 size={38} />
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
-                      setStatusMessage(null);
-                    }}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'inherit',
-                      cursor: 'pointer',
-                      padding: '4px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      opacity: 0.8,
-                      borderRadius: '4px'
-                    }}
-                    title="Dismiss"
-                    aria-label="Dismiss notification"
-                  >
-                    <X size={16} />
-                  </button>
+                  <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '10px' }}>
+                    Enquiry Received Successfully!
+                  </h3>
+                  <p style={{ color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.95rem', maxWidth: '440px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+                    Thank you! Our factory technical engineers will review your machinery requirements and reach out within 24 hours with catalog, layout, and quotation details.
+                  </p>
+                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSubmittedSuccess(false);
+                        setStatusMessage(null);
+                      }}
+                      className="btn btn-orange"
+                      style={{ padding: '12px 24px', fontWeight: 700 }}
+                    >
+                      <span>Send Another Enquiry</span>
+                    </button>
+                    <a
+                      href="https://wa.me/919342919060"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn"
+                      style={{
+                        background: 'rgba(37, 211, 102, 0.15)',
+                        color: '#25D366',
+                        border: '1px solid rgba(37, 211, 102, 0.4)',
+                        padding: '12px 20px',
+                        fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      <WhatsAppIcon size={18} />
+                      <span>Instant Chat on WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
-              )}
+              ) : (
+                <>
+                  {statusMessage && (
+                    <div 
+                      className={`form-status-alert ${statusMessage.type}`} 
+                      style={{ 
+                        marginTop: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '12px'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {statusMessage.type === 'success' ? (
+                          <CheckCircle2 size={20} style={{ flexShrink: 0 }} />
+                        ) : (
+                          <AlertCircle size={20} style={{ flexShrink: 0 }} />
+                        )}
+                        <span>{statusMessage.text}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
+                          setStatusMessage(null);
+                        }}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'inherit',
+                          cursor: 'pointer',
+                          padding: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          opacity: 0.8,
+                          borderRadius: '4px'
+                        }}
+                        title="Dismiss"
+                        aria-label="Dismiss notification"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  )}
 
-              <form onSubmit={handleSubmit} className="contact-custom-form" noValidate>
+                  <form onSubmit={handleSubmit} className="contact-custom-form" noValidate>
                 <div className="contact-form-2col-row">
                   <div className="contact-input-group">
                     <label className="contact-input-label">
@@ -260,7 +335,11 @@ export const ContactPage: React.FC = () => {
                       placeholder="Your full name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="contact-dark-input"
+                      onBlur={() => {
+                        const res = validateName(formData.name);
+                        setErrors((prev) => ({ ...prev, name: res.isValid ? '' : (res.error || '') }));
+                      }}
+                      className={`contact-dark-input ${errors.name ? 'has-error' : ''}`}
                       disabled={loading}
                     />
                     {errors.name && <span className="contact-field-error">{errors.name}</span>}
@@ -403,6 +482,8 @@ export const ContactPage: React.FC = () => {
                   </span>
                 </div>
               </form>
+            </>
+          )}
             </div>
 
             {/* Right Column: Single Unified Contact Info Card */}

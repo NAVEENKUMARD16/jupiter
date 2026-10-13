@@ -2,6 +2,7 @@ import { apiClient } from './api';
 
 export interface EnquiryItem {
   id: string;
+  referenceNo?: string;
   name: string;
   phone: string;
   email?: string;
@@ -71,6 +72,49 @@ export const normalizeEnquiryStatus = (status?: string): 'New' | 'Contacted' | '
   if (s === 'CONTACTED') return 'Contacted';
   if (s === 'CLOSED') return 'Closed';
   return 'New';
+};
+
+export const formatEnquiryReference = (enquiry?: Partial<EnquiryItem> | null, allEnquiries?: EnquiryItem[]): string => {
+  if (!enquiry) return 'ENQ-2026-0001';
+  if (enquiry.referenceNo) return enquiry.referenceNo;
+  if (enquiry.id && /^ENQ-\d{4}-\d{3,4}$/i.test(enquiry.id)) return enquiry.id;
+
+  const dateStr = enquiry.createdAt || enquiry.date;
+  const d = dateStr ? new Date(dateStr) : new Date();
+  const year = !isNaN(d.getFullYear()) ? d.getFullYear() : 2026;
+
+  // If cuid / alphanumeric id contains a sequence (e.g. cmv6fohko0001kwdi2u6a8rxp -> 0001)
+  const idStr = enquiry.id || '';
+  const seqMatch = idStr.match(/\d{4}/);
+  if (seqMatch) {
+    return `ENQ-${year}-${seqMatch[0]}`;
+  }
+
+  // If allEnquiries is provided, use chronological index
+  if (allEnquiries && allEnquiries.length > 0 && enquiry.id) {
+    const sorted = [...allEnquiries].sort((a, b) => {
+      const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return ta - tb;
+    });
+    const idx = sorted.findIndex(e => e.id === enquiry.id);
+    if (idx >= 0) {
+      return `ENQ-${year}-${String(idx + 1).padStart(4, '0')}`;
+    }
+  }
+
+  // Deterministic fallback based on id / string hash
+  if (idStr) {
+    let hash = 0;
+    for (let i = 0; i < idStr.length; i++) {
+      hash = ((hash << 5) - hash) + idStr.charCodeAt(i);
+      hash |= 0;
+    }
+    const num = Math.abs(hash % 9999) + 1;
+    return `ENQ-${year}-${String(num).padStart(4, '0')}`;
+  }
+
+  return `ENQ-${year}-0001`;
 };
 
 export const fetchEnquiriesFromDb = async (): Promise<EnquiryItem[]> => {

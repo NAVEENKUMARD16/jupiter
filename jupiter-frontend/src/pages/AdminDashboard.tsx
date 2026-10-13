@@ -23,6 +23,7 @@ import {
   EyeOff,
   ArrowUp,
   ArrowDown,
+  ArrowRight,
   Plus,
   X,
   ExternalLink,
@@ -142,7 +143,8 @@ import {
   markAllStoredEnquiriesAsRead,
   fetchEnquiriesFromDb,
   normalizeEnquiryStatus,
-  formatEnquiryDate
+  formatEnquiryDate,
+  formatEnquiryReference
 } from '../services/enquiryService';
 import { getProductImageUrl, handleImageError } from '../utils/imageUrl';
 
@@ -303,6 +305,7 @@ const ImageUploadField: React.FC<{
 // Types for Admin Dashboard
 export interface EnquiryItem {
   id: string;
+  referenceNo?: string;
   name: string;
   phone: string;
   email?: string;
@@ -438,8 +441,10 @@ interface SeoSettings {
     return 'dashboard';
   })();
 
-  const switchTab = (tabId: string) => {
-    setSearchQuery('');
+  const switchTab = (tabId: string, keepSearch: boolean = false) => {
+    if (!keepSearch) {
+      setSearchQuery('');
+    }
     setSearchParams({ tab: tabId });
     setIsMobileSidebarOpen(false);
   };
@@ -453,6 +458,28 @@ interface SeoSettings {
   })();
   const [dateRange, setDateRange] = useState(currentMonthRange);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const [searchFilterTab, setSearchFilterTab] = useState<'all' | 'products' | 'enquiries'>('all');
+  const searchWrapperRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target as Node)) {
+        setIsSearchDropdownOpen(false);
+      }
+    };
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsSearchDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleGlobalKeyDown);
+    };
+  }, []);
   const [enquiryFilter, setEnquiryFilter] = useState<'All' | 'New' | 'Contacted' | 'Closed'>('All');
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
@@ -1072,14 +1099,21 @@ interface SeoSettings {
   };
 
   // Status toggle for enquiries (strictly isolated to the clicked enquiry)
-  const handleToggleStatus = (id: string, targetEnq?: EnquiryItem) => {
+  const handleToggleStatus = (id: string, targetEnq?: EnquiryItem, shouldCloseModal: boolean = false) => {
     const enq = targetEnq || enquiries.find(e => e.id === id);
     if (!enq) return;
     const nextStatus = enq.status === 'New' ? 'Contacted' : (enq.status === 'Contacted' ? 'Closed' : 'New');
     const targetIdx = enquiries.findIndex(e => e === enq || (e.id === enq.id && e.name === enq.name && e.product === enq.product && e.phone === enq.phone));
     const updated = updateStoredEnquiryStatus(id, nextStatus as any, targetIdx >= 0 ? targetIdx : undefined);
     setEnquiries(updated);
-    triggerToast(`Status updated to ${nextStatus}!`);
+
+    // Automatically close the enquiry details popup if requested or if currently open
+    if (shouldCloseModal || selectedEnquiry?.id === id) {
+      setSelectedEnquiry(null);
+    }
+
+    const refNo = formatEnquiryReference(enq, enquiries);
+    triggerToast(`Enquiry ${refNo} (${enq.name}) marked as "${nextStatus}" successfully!`);
   };
 
   const handleDeleteEnquiry = (id: string, targetEnq?: EnquiryItem) => {
@@ -1235,6 +1269,88 @@ interface SeoSettings {
       (b.category || '').toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
+
+  // Global search multi-category matching (Products, Enquiries/Customers, and Views)
+  const globalMatchingProducts = React.useMemo(() => {
+    const q = (searchQuery || '').trim().toLowerCase();
+    if (!q) return [];
+    return (products || []).filter(p => {
+      if (!p) return false;
+      const name = (p.name || '').toLowerCase();
+      const cat = (p.category || '').toLowerCase();
+      const brand = (p.brandTag || '').toLowerCase();
+      const cap = (p.capacity || '').toLowerCase();
+      const power = (p.power || '').toLowerCase();
+      const desc = (p.description || '').toLowerCase();
+      const brick = (p.brickSize || '').toLowerCase();
+      return name.includes(q) || cat.includes(q) || brand.includes(q) || cap.includes(q) || power.includes(q) || desc.includes(q) || brick.includes(q);
+    });
+  }, [products, searchQuery]);
+
+  const globalMatchingEnquiries = React.useMemo(() => {
+    const q = (searchQuery || '').trim().toLowerCase();
+    if (!q) return [];
+    return (enquiries || []).filter(enq => {
+      if (!enq) return false;
+      const name = (enq.name || '').toLowerCase();
+      const phone = (enq.phone || '').toLowerCase();
+      const email = (enq.email || '').toLowerCase();
+      const location = (enq.location || '').toLowerCase();
+      const prod = (enq.product || '').toLowerCase();
+      const prodInt = (enq.productInterest || '').toLowerCase();
+      const msg = (enq.message || '').toLowerCase();
+      const status = (enq.status || '').toLowerCase();
+      const ref = formatEnquiryReference(enq, enquiries).toLowerCase();
+      const id = (enq.id || '').toLowerCase();
+      return name.includes(q) || phone.includes(q) || email.includes(q) || location.includes(q) || prod.includes(q) || prodInt.includes(q) || msg.includes(q) || status.includes(q) || ref.includes(q) || id.includes(q);
+    });
+  }, [enquiries, searchQuery]);
+
+  const globalMatchingSections = React.useMemo(() => {
+    const q = (searchQuery || '').trim().toLowerCase();
+    if (!q) return [];
+    const sections = [
+      { id: 'dashboard', label: 'Dashboard Overview & Tasks', desc: 'KPI metrics, today\'s follow-up tasks & recent activity stream', tab: 'dashboard', keywords: ['overview', 'recent', 'activity', 'task', 'tasks', 'kpi', 'metrics', 'stats', 'home'] },
+      { id: 'enquiries', label: 'Customer Enquiries & Quotations', desc: 'Browse customer leads, requested machines & quotation statuses', tab: 'enquiries', keywords: ['enquiry', 'enquiries', 'lead', 'leads', 'customer', 'customers', 'quote', 'quotations', 'follow up'] },
+      { id: 'products', label: 'Machinery Products Catalog', desc: 'Full product line: fly ash, block, interlock, paver machines & batching plants', tab: 'products', keywords: ['product', 'products', 'machine', 'machinery', 'catalog', 'equipment', 'models'] },
+      { id: 'projects', label: 'Client Projects & Installations', desc: 'Track turn-key plant setups and industrial client sites', tab: 'projects', keywords: ['project', 'projects', 'client', 'clients', 'installation', 'installations'] },
+      { id: 'blogs', label: 'Technical Blogs & Guides', desc: 'Articles on fly ash brick manufacturing and plant economics', tab: 'blogs', keywords: ['blog', 'blogs', 'article', 'articles', 'guide', 'guides'] },
+      { id: 'locations', label: 'Machine Delivery Locations', desc: 'Pan-India dispatch tracking, transport vehicles & client delivery sites', tab: 'locations', keywords: ['location', 'locations', 'delivery', 'deliveries', 'dispatch', 'transport', 'trailer'] },
+      { id: 'settings', label: 'Company & Website Settings', desc: 'Manage company contact numbers, WhatsApp support & maintenance mode', tab: 'settings', keywords: ['setting', 'settings', 'maintenance', 'seo', 'company', 'whatsapp'] },
+    ];
+    return sections.filter(s =>
+      s.label.toLowerCase().includes(q) ||
+      s.desc.toLowerCase().includes(q) ||
+      s.keywords.some(k => k.includes(q) || q.includes(k))
+    );
+  }, [searchQuery]);
+
+  const totalGlobalSearchResults = globalMatchingProducts.length + globalMatchingEnquiries.length + globalMatchingSections.length;
+
+  const handleSelectProductSearchResult = (prod: ProductItem) => {
+    setIsSearchDropdownOpen(false);
+    handleProductOpenSpec(prod, { stopPropagation: () => {} } as any);
+    setAdminProductCategory('All');
+    switchTab('products', true);
+    triggerToast(`Opened "${prod.name}" technical specifications`);
+  };
+
+  const handleSelectEnquirySearchResult = (enq: EnquiryItem) => {
+    setIsSearchDropdownOpen(false);
+    if (!enq.isRead) {
+      const updated = markStoredEnquiryAsRead(enq.id);
+      setEnquiries(updated);
+    }
+    setSelectedEnquiry({ ...enq, isRead: true });
+    switchTab('enquiries', true);
+    triggerToast(`Opened enquiry for ${enq.name} (${formatEnquiryReference(enq, enquiries)})`);
+  };
+
+  const handleSelectSectionSearchResult = (tabId: string) => {
+    setIsSearchDropdownOpen(false);
+    setSearchQuery('');
+    switchTab(tabId);
+  };
 
   const navMenuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
@@ -1414,23 +1530,328 @@ interface SeoSettings {
             </div>
           </div>
 
-          {/* Search Box */}
-          <div className="admin-search-box">
-            <Search size={17} className="admin-search-icon" />
-            <input
-              type="text"
-              placeholder="Search products, enquiries, customers..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="admin-search-input"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                style={{ background: 'transparent', border: 'none', color: '#94A3B8', cursor: 'pointer' }}
-              >
-                <X size={15} />
-              </button>
+          {/* Global Search Box with Interactive Results Dropdown */}
+          <div className="admin-search-wrapper" ref={searchWrapperRef}>
+            <div className={`admin-search-box ${isSearchDropdownOpen && searchQuery.trim() ? 'has-dropdown-open' : ''}`}>
+              <Search size={17} className="admin-search-icon" />
+              <input
+                type="text"
+                placeholder="Search products, enquiries, customers..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setIsSearchDropdownOpen(true);
+                }}
+                onFocus={() => {
+                  if (searchQuery.trim()) {
+                    setIsSearchDropdownOpen(true);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setIsSearchDropdownOpen(false);
+                  } else if (e.key === 'Enter') {
+                    if (globalMatchingEnquiries.length === 1 && globalMatchingProducts.length === 0) {
+                      handleSelectEnquirySearchResult(globalMatchingEnquiries[0]);
+                    } else if (globalMatchingProducts.length === 1 && globalMatchingEnquiries.length === 0) {
+                      handleSelectProductSearchResult(globalMatchingProducts[0]);
+                    } else if (globalMatchingProducts.length > 0 && globalMatchingEnquiries.length === 0) {
+                      setAdminProductCategory('All');
+                      switchTab('products', true);
+                      setIsSearchDropdownOpen(false);
+                    } else if (globalMatchingEnquiries.length > 0 && globalMatchingProducts.length === 0) {
+                      switchTab('enquiries', true);
+                      setIsSearchDropdownOpen(false);
+                    } else if (globalMatchingSections.length > 0 && globalMatchingProducts.length === 0 && globalMatchingEnquiries.length === 0) {
+                      handleSelectSectionSearchResult(globalMatchingSections[0].tab);
+                    }
+                  }
+                }}
+                className="admin-search-input"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setIsSearchDropdownOpen(false);
+                  }}
+                  style={{ background: 'transparent', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '2px', display: 'flex' }}
+                  title="Clear search"
+                >
+                  <X size={15} />
+                </button>
+              )}
+            </div>
+
+            {/* Interactive Global Search Dropdown Panel */}
+            {isSearchDropdownOpen && searchQuery.trim().length > 0 && (
+              <div className="admin-search-dropdown" onClick={(e) => e.stopPropagation()}>
+                {/* Dropdown Header */}
+                <div className="admin-search-dropdown-header">
+                  <div className="admin-search-dropdown-title">
+                    <Search size={15} className="text-orange" />
+                    <span>Search Results for "{searchQuery.trim()}"</span>
+                    <span className="admin-search-badge-count">
+                      {totalGlobalSearchResults} found
+                    </span>
+                  </div>
+                  <span className="admin-search-esc-hint">Press Esc to close</span>
+                </div>
+
+                {/* Filter Tabs if multiple types found */}
+                {totalGlobalSearchResults > 0 && (
+                  <div className="admin-search-tabs-row">
+                    <button
+                      type="button"
+                      className={`admin-search-tab-pill ${searchFilterTab === 'all' ? 'active' : ''}`}
+                      onClick={() => setSearchFilterTab('all')}
+                    >
+                      All ({totalGlobalSearchResults})
+                    </button>
+                    {globalMatchingProducts.length > 0 && (
+                      <button
+                        type="button"
+                        className={`admin-search-tab-pill ${searchFilterTab === 'products' ? 'active' : ''}`}
+                        onClick={() => setSearchFilterTab('products')}
+                      >
+                        <Package size={13} />
+                        Products ({globalMatchingProducts.length})
+                      </button>
+                    )}
+                    {globalMatchingEnquiries.length > 0 && (
+                      <button
+                        type="button"
+                        className={`admin-search-tab-pill ${searchFilterTab === 'enquiries' ? 'active' : ''}`}
+                        onClick={() => setSearchFilterTab('enquiries')}
+                      >
+                        <FileText size={13} />
+                        Enquiries ({globalMatchingEnquiries.length})
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Results List / Empty State */}
+                <div className="admin-search-results-scroll">
+                  {totalGlobalSearchResults === 0 ? (
+                    <div className="admin-search-empty-box">
+                      <Search size={34} style={{ color: '#94A3B8', margin: '0 auto 10px', display: 'block' }} />
+                      <div className="admin-search-empty-title">
+                        No records found for "{searchQuery}"
+                      </div>
+                      <p className="admin-search-empty-desc">
+                        Try searching by customer name (e.g. "Ramya"), machine name ("Fly Ash", "Block"), phone number, or enquiry reference number.
+                      </p>
+                      <div className="admin-search-empty-quick-btns">
+                        <button
+                          type="button"
+                          className="btn"
+                          style={{ background: '#F1F5F9', color: '#0F172A', fontSize: '0.8rem', padding: '6px 12px' }}
+                          onClick={() => {
+                            setIsSearchDropdownOpen(false);
+                            setAdminProductCategory('All');
+                            switchTab('products');
+                          }}
+                        >
+                          <Package size={14} />
+                          <span>All Products ({products.length})</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="btn"
+                          style={{ background: '#F1F5F9', color: '#0F172A', fontSize: '0.8rem', padding: '6px 12px' }}
+                          onClick={() => {
+                            setIsSearchDropdownOpen(false);
+                            switchTab('enquiries');
+                          }}
+                        >
+                          <FileText size={14} />
+                          <span>All Enquiries ({enquiries.length})</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {/* 1. Products Section */}
+                      {(searchFilterTab === 'all' || searchFilterTab === 'products') && globalMatchingProducts.length > 0 && (
+                        <div>
+                          <div className="admin-search-section-head">
+                            <span>Matching Products ({globalMatchingProducts.length})</span>
+                            <button
+                              type="button"
+                              className="admin-search-footer-link"
+                              onClick={() => {
+                                setIsSearchDropdownOpen(false);
+                                setAdminProductCategory('All');
+                                switchTab('products', true);
+                              }}
+                            >
+                              View all in Catalog →
+                            </button>
+                          </div>
+                          {globalMatchingProducts.slice(0, 5).map((prod) => (
+                            <div
+                              key={prod.id}
+                              className="admin-search-result-card"
+                              onClick={() => handleSelectProductSearchResult(prod)}
+                            >
+                              <div className="admin-search-thumb-box">
+                                {prod.image || prod.imageUrl ? (
+                                  <img
+                                    src={resolveImg(prod.imageUrl || prod.image)}
+                                    alt={prod.name}
+                                    className="admin-search-thumb-img"
+                                  />
+                                ) : (
+                                  <Package size={20} className="text-orange" />
+                                )}
+                              </div>
+                              <div className="admin-search-card-main">
+                                <div className="admin-search-card-title-row">
+                                  <span className="admin-search-card-title">{prod.name}</span>
+                                  <span className="admin-search-tag-badge product-cat">
+                                    {prod.category}
+                                  </span>
+                                </div>
+                                <div className="admin-search-card-subline">
+                                  {prod.capacity && <span>Capacity: {prod.capacity}</span>}
+                                  {prod.power && <span>• Power: {prod.power}</span>}
+                                  {prod.brandTag && <span>• {prod.brandTag}</span>}
+                                </div>
+                              </div>
+                              <ChevronRight size={16} className="admin-search-card-arrow" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* 2. Customer Enquiries Section */}
+                      {(searchFilterTab === 'all' || searchFilterTab === 'enquiries') && globalMatchingEnquiries.length > 0 && (
+                        <div style={{ marginTop: (searchFilterTab === 'all' && globalMatchingProducts.length > 0) ? '6px' : '0' }}>
+                          <div className="admin-search-section-head">
+                            <span>Matching Customer Enquiries ({globalMatchingEnquiries.length})</span>
+                            <button
+                              type="button"
+                              className="admin-search-footer-link"
+                              onClick={() => {
+                                setIsSearchDropdownOpen(false);
+                                switchTab('enquiries', true);
+                              }}
+                            >
+                              View all in Enquiries →
+                            </button>
+                          </div>
+                          {globalMatchingEnquiries.slice(0, 5).map((enq) => {
+                            const ref = formatEnquiryReference(enq, enquiries);
+                            const initial = (enq.name || 'C').charAt(0).toUpperCase();
+                            const statusNorm = normalizeEnquiryStatus(enq.status);
+                            return (
+                              <div
+                                key={enq.id}
+                                className="admin-search-result-card"
+                                onClick={() => handleSelectEnquirySearchResult(enq)}
+                              >
+                                <div className="admin-search-avatar-box">
+                                  {initial}
+                                </div>
+                                <div className="admin-search-card-main">
+                                  <div className="admin-search-card-title-row">
+                                    <span className="admin-search-card-title">{enq.name}</span>
+                                    <span className={`admin-search-tag-badge status-${statusNorm.toLowerCase()}`}>
+                                      {enq.status}
+                                    </span>
+                                    <span style={{ fontSize: '0.72rem', color: '#FF9200', fontWeight: 700 }}>
+                                      {ref}
+                                    </span>
+                                  </div>
+                                  <div className="admin-search-card-subline">
+                                    <span style={{ fontWeight: 600, color: '#0F172A' }}>
+                                      {enq.productInterest || enq.product}
+                                    </span>
+                                    <span>• {enq.phone}</span>
+                                    {enq.date && <span>• {enq.date}</span>}
+                                  </div>
+                                  {enq.message && (
+                                    <div style={{ fontSize: '0.73rem', color: '#64748B', fontStyle: 'italic', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                      "{enq.message}"
+                                    </div>
+                                  )}
+                                </div>
+                                <ChevronRight size={16} className="admin-search-card-arrow" />
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      {/* 3. Navigation & Section Matches */}
+                      {searchFilterTab === 'all' && globalMatchingSections.length > 0 && (
+                        <div style={{ marginTop: '6px' }}>
+                          <div className="admin-search-section-head">
+                            <span>System Navigation & Views ({globalMatchingSections.length})</span>
+                          </div>
+                          {globalMatchingSections.slice(0, 3).map((sec) => (
+                            <div
+                              key={sec.id}
+                              className="admin-search-result-card"
+                              onClick={() => handleSelectSectionSearchResult(sec.tab)}
+                            >
+                              <div className="admin-search-thumb-box" style={{ background: '#FFF7ED', borderColor: '#FDBA74' }}>
+                                <ArrowRight size={18} className="text-orange" />
+                              </div>
+                              <div className="admin-search-card-main">
+                                <div className="admin-search-card-title-row">
+                                  <span className="admin-search-card-title">{sec.label}</span>
+                                  <span className="admin-search-tag-badge" style={{ background: '#F1F5F9', color: '#475569' }}>
+                                    Go to View
+                                  </span>
+                                </div>
+                                <div className="admin-search-card-subline">
+                                  {sec.desc}
+                                </div>
+                              </div>
+                              <ChevronRight size={16} className="admin-search-card-arrow" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                {/* Dropdown Footer */}
+                {totalGlobalSearchResults > 0 && (
+                  <div className="admin-search-dropdown-footer">
+                    <span style={{ color: '#64748B' }}>
+                      Click record to open details & specifications
+                    </span>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button
+                        type="button"
+                        className="admin-search-footer-link"
+                        onClick={() => {
+                          setIsSearchDropdownOpen(false);
+                          setAdminProductCategory('All');
+                          switchTab('products', true);
+                        }}
+                      >
+                        Products ({globalMatchingProducts.length})
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-search-footer-link"
+                        onClick={() => {
+                          setIsSearchDropdownOpen(false);
+                          switchTab('enquiries', true);
+                        }}
+                      >
+                        Enquiries ({globalMatchingEnquiries.length})
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -2217,10 +2638,10 @@ interface SeoSettings {
                           <ProductCardImage src={mach.imageUrl || mach.image} alt={mach.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                         </div>
                         <div className="admin-pop-machine-info">
-                          <strong className="admin-pop-machine-title">{mach.name}</strong>
-                          <span className="admin-pop-machine-sub">{mach.capacity || mach.category}</span>
+                          <strong className="admin-pop-machine-title" title={mach.name}>{mach.name}</strong>
+                          <span className="admin-pop-machine-sub" title={mach.capacity || mach.category}>{mach.capacity || mach.category}</span>
                         </div>
-                        <ChevronRight size={16} className="text-muted" />
+                        <ChevronRight size={16} className="text-muted" style={{ flexShrink: 0 }} />
                       </div>
                     ))}
                   </div>
@@ -2243,8 +2664,8 @@ interface SeoSettings {
                   <button
                     onClick={() => {
                       const csvContent = "data:text/csv;charset=utf-8,"
-                        + ["ID,Name,Phone,Email,Product,Date,Status,Location"].join(",") + "\n"
-                        + enquiries.map(e => `"${e.id}","${e.name}","${e.phone}","${e.email || ''}","${e.product}","${e.date}","${e.status}","${e.location || ''}"`).join("\n");
+                        + ["Reference_No,Database_ID,Name,Phone,Email,Product,Date,Status,Location"].join(",") + "\n"
+                        + enquiries.map(e => `"${formatEnquiryReference(e, enquiries)}","${e.id}","${e.name}","${e.phone}","${e.email || ''}","${e.product}","${e.date}","${e.status}","${e.location || ''}"`).join("\n");
                       const encodedUri = encodeURI(csvContent);
                       const link = document.createElement("a");
                       link.setAttribute("href", encodedUri);
@@ -2350,9 +2771,14 @@ interface SeoSettings {
                         filteredEnquiries.map((enquiry, idx) => (
                           <tr key={enquiry.id}>
                             <td>
-                              <strong style={{ color: '#001827', fontSize: '0.8rem' }}>
-                                #{String(idx + 1).padStart(3, '0')}
-                              </strong>
+                              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <strong style={{ color: '#001827', fontSize: '0.8rem' }}>
+                                  {formatEnquiryReference(enquiry, enquiries)}
+                                </strong>
+                                <span style={{ color: '#94A3B8', fontSize: '0.7rem' }}>
+                                  #{String(idx + 1).padStart(3, '0')}
+                                </span>
+                              </div>
                             </td>
                             <td>
                               <strong>{enquiry.name}</strong>
@@ -2484,17 +2910,7 @@ interface SeoSettings {
               </div>
 
               {/* Category Filter Pills (Exact Matching Tabs in Single Row) */}
-              <div style={{
-                display: 'flex',
-                flexWrap: 'nowrap',
-                gap: '8px',
-                alignItems: 'center',
-                marginBottom: '24px',
-                overflowX: 'auto',
-                whiteSpace: 'nowrap',
-                paddingBottom: '6px',
-                scrollbarWidth: 'thin'
-              }}>
+              <div className="admin-category-filter-bar">
                 {adminProductCategories.map((cat) => {
                   const count = cat === 'All' ? products.filter(p => matchAdminCategory(p, 'All')).length : products.filter(p => matchAdminCategory(p, cat)).length;
                   const isActive = adminProductCategory === cat;
@@ -2514,7 +2930,7 @@ interface SeoSettings {
                         color: isActive ? '#FFFFFF' : '#0F172A',
                         border: isActive ? '1px solid #FF9200' : '1px solid #E2E8F0',
                         borderRadius: '9999px',
-                        padding: '7px 16px',
+                        padding: '8px 18px',
                         fontSize: '0.84rem',
                         fontWeight: 700,
                         cursor: 'pointer',
@@ -3140,32 +3556,35 @@ interface SeoSettings {
               ) : (
                 <div className="admin-gallery-grid-display">
                   {filteredGallery.map((gal) => (
-                    <div key={gal.id} className="admin-gallery-card" style={{ position: 'relative' }}>
+                    <div key={gal.id} className="admin-gallery-card">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          requestConfirm({
+                            title: 'Remove Gallery Photo',
+                            message: 'Are you sure you want to remove this image from the gallery?',
+                            itemName: gal.title,
+                            confirmText: 'Remove Photo',
+                            variant: 'danger',
+                            icon: 'alert',
+                            onConfirm: async () => {
+                              await deleteGalleryPhoto(gal.id);
+                              setGallery(getStoredGalleryPhotos());
+                              triggerToast('Image removed from gallery');
+                            }
+                          });
+                        }}
+                        className="admin-gallery-delete-btn"
+                        title={`Delete ${gal.title}`}
+                        aria-label={`Delete ${gal.title}`}
+                      >
+                        <Trash2 size={15} />
+                      </button>
                       <img src={resolveImg(gal.image)} alt={gal.title} />
                       <div className="admin-gallery-overlay">
                         <strong>{gal.title}</strong>
                         <span>{gal.category}</span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            requestConfirm({
-                              title: 'Remove Gallery Photo',
-                              message: 'Are you sure you want to remove this image from the gallery?',
-                              itemName: gal.title,
-                              confirmText: 'Remove Photo',
-                              variant: 'danger',
-                              onConfirm: async () => {
-                                await deleteGalleryPhoto(gal.id);
-                                setGallery(getStoredGalleryPhotos());
-                                triggerToast('Image removed from gallery');
-                              }
-                            });
-                          }}
-                          style={{ marginTop: '8px', background: 'rgba(239, 68, 68, 0.9)', color: '#fff', border: 'none', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}
-                        >
-                          Delete
-                        </button>
                       </div>
                     </div>
                   ))}
@@ -4214,8 +4633,28 @@ interface SeoSettings {
           <div className="modal-content-card" style={{ maxWidth: '560px' }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-bar">
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFFFFF' }}>Customer Enquiry Details</h3>
-                <span style={{ fontSize: '0.78rem', color: '#CBD5E1' }}>ID: {selectedEnquiry.id} • {selectedEnquiry.date}</span>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '4px' }}>Customer Enquiry Details</h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <span style={{
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    color: '#FF9200',
+                    background: 'rgba(255, 146, 0, 0.15)',
+                    border: '1px solid rgba(255, 146, 0, 0.4)',
+                    padding: '2px 8px',
+                    borderRadius: '5px',
+                    letterSpacing: '0.03em'
+                  }}>
+                    Ref: {formatEnquiryReference(selectedEnquiry, enquiries)}
+                  </span>
+                  <span style={{ fontSize: '0.76rem', color: '#CBD5E1' }}>• {selectedEnquiry.date}</span>
+                  <span
+                    style={{ fontSize: '0.72rem', color: '#94A3B8', cursor: 'help' }}
+                    title={`Internal Database ID: ${selectedEnquiry.id}`}
+                  >
+                    (DB: {selectedEnquiry.id && selectedEnquiry.id.length > 14 ? `${selectedEnquiry.id.slice(0, 10)}...` : selectedEnquiry.id})
+                  </span>
+                </div>
               </div>
               <button className="modal-close-btn" onClick={() => setSelectedEnquiry(null)}>
                 <X size={20} />
@@ -4268,7 +4707,8 @@ interface SeoSettings {
 
               <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
                 <button
-                  onClick={() => handleToggleStatus(selectedEnquiry.id)}
+                  type="button"
+                  onClick={() => handleToggleStatus(selectedEnquiry.id, selectedEnquiry, true)}
                   className="btn btn-orange"
                   style={{ flex: 1, justifyContent: 'center' }}
                 >
