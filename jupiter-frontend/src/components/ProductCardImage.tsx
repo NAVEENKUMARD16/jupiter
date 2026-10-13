@@ -71,9 +71,12 @@ export const ProductCardImage: React.FC<ProductCardImageProps> = ({
     <img
       src={resolvedUrl}
       alt={alt}
+      width={400}
+      height={260}
       className={className}
       style={style}
       loading="lazy"
+      decoding="async"
       onError={() => setHasError(true)}
     />
   );

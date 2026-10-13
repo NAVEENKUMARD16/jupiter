@@ -285,6 +285,7 @@ export const BlogPage: React.FC = () => {
       <div className="blog-detail-view bg-white">
         <PageBanner
           title={selectedBlog.title}
+          titleAs="div"
           breadcrumbs={[
             { label: 'Blog', link: '/blog' },
             { label: selectedBlog.title.slice(0, 32) + '...' }
@@ -377,6 +378,8 @@ export const BlogPage: React.FC = () => {
                 <img
                   src={selectedBlog.image}
                   alt={selectedBlog.title}
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     width: '100%',
                     height: '100%',

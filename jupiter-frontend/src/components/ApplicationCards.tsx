@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import flyashImg from '../assets/images/Machines/flyash.png';
+import flyashImg from '../assets/images/Machines/flyash-opt.webp';
 import { getStoredProducts, ProductItem } from '../services/productService';
 import { getProductImageUrl } from '../utils/imageUrl';
 import { ProductCardImage } from './ProductCardImage';
@@ -51,7 +51,7 @@ export const ApplicationCards: React.FC = () => {
       brandTag: 'POPULAR',
       status: 'Active',
       description: 'High-compaction automatic hydraulic fly ash brick machine for heavy-duty industrial masonry production.',
-      image: '/images/flyash-vertical-machine.png',
+      image: '/images/flyash-vertical-machine.webp',
     },
     {
       id: 'PROD-FLYASH-4BRICK-ROTARY',
@@ -64,7 +64,7 @@ export const ApplicationCards: React.FC = () => {
       brandTag: 'BESTSELLER',
       status: 'Active',
       description: 'Heavy-duty rotary brick machine designed for sustainable, continuous, high-speed production.',
-      image: '/images/flyash-4brick-rotary.png',
+      image: '/images/flyash-4brick-rotary.webp',
     },
     {
       id: 'PROD-STORAGE-SILO',
@@ -77,7 +77,7 @@ export const ApplicationCards: React.FC = () => {
       brandTag: 'INDUSTRIAL',
       status: 'Active',
       description: 'Industrial bulk material storage silo engineered for cement, fly ash, iron oxide, and lime sludge.',
-      image: '/images/storage-silo-product.png',
+      image: '/images/storage-silo-product.webp',
     },
   ];
 
@@ -154,7 +154,7 @@ export const ApplicationCards: React.FC = () => {
                     <span style={{ 
                       fontSize: '0.74rem', 
                       fontWeight: 700, 
-                      color: '#FF9200', 
+                      color: '#C2410C', 
                       textTransform: 'uppercase', 
                       letterSpacing: '0.06em',
                       display: 'block',
@@ -192,7 +192,7 @@ export const ApplicationCards: React.FC = () => {
                         </span>
                       )}
                       {prod.power && (
-                        <span style={{ background: '#FFF7ED', color: '#EA580C', padding: '3px 8px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700 }}>
+                        <span style={{ background: '#FFF7ED', color: '#C2410C', padding: '3px 8px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700 }}>
                           {prod.power}
                         </span>
                       )}

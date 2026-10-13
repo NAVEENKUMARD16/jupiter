@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
         <div className="footer-columns-grid">
           {/* Column 1: Brand Info & Social */}
           <div className="footer-col-brand">
-            <Link to="/" className="brand-logo-group" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none', marginBottom: '16px' }}>
+            <Link to="/" className="brand-logo-group" aria-label="Jupiter Industries Home" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none', marginBottom: '16px' }}>
               <div style={{
                 background: '#FFFFFF',
                 borderRadius: '10px',
@@ -24,7 +24,11 @@ export const Footer: React.FC = () => {
               }}>
                 <img 
                   src={IMAGES.logo} 
-                  alt="Jupiter Industries" 
+                  alt="Jupiter Industries Logo" 
+                  width={200}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
                   style={{ 
                     height: '40px', 
                     width: 'auto', 
@@ -81,7 +85,7 @@ export const Footer: React.FC = () => {
 
           {/* Column 2: Quick Links */}
           <div className="footer-col-quicklinks">
-            <h4 className="footer-col-title">QUICK LINKS</h4>
+            <h3 className="footer-col-title">QUICK LINKS</h3>
             <ul className="footer-links-list">
               <li><Link to="/" className="footer-link-anchor">Home</Link></li>
               <li><Link to="/about-us" className="footer-link-anchor">About Us</Link></li>
@@ -94,7 +98,7 @@ export const Footer: React.FC = () => {
 
           {/* Column 3: Our Products */}
           <div className="footer-col-products">
-            <h4 className="footer-col-title">OUR PRODUCTS</h4>
+            <h3 className="footer-col-title">OUR PRODUCTS</h3>
             <ul className="footer-links-list">
               <li><Link to="/products/fly-ash-brick-machine" className="footer-link-anchor">Fly Ash Machine</Link></li>
               <li><Link to="/products/hollow-and-solid-block-machine" className="footer-link-anchor">Hollow and Solid Block Machine</Link></li>
@@ -108,7 +112,7 @@ export const Footer: React.FC = () => {
 
           {/* Column 4: Contact Info */}
           <div className="footer-col-contact">
-            <h4 className="footer-col-title">CONTACT INFO</h4>
+            <h3 className="footer-col-title">CONTACT INFO</h3>
             <div className="footer-contact-item">
               <MapPin size={20} className="text-orange" style={{ flexShrink: 0, marginTop: '2px' }} />
               <a 

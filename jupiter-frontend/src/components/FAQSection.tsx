@@ -61,7 +61,7 @@ export const FAQSection: React.FC = () => {
             <div style={{
               fontSize: '0.85rem',
               fontWeight: 600,
-              color: '#EA580C',
+              color: '#C2410C',
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               marginBottom: '12px'

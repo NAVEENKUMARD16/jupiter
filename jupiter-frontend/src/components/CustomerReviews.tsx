@@ -20,7 +20,7 @@ export const CustomerReviews: React.FC = () => {
       quote: '"Prompt customer support and reliable fleet delivery. The interlocking bricks and vibration block press have made our boundary and pathway projects effortless."',
       colorBg: '#ECFDF5',
       colorBorder: '#10B981',
-      colorText: '#059669'
+      colorText: '#065F46'
     },
     {
       initials: 'RK',
@@ -38,7 +38,7 @@ export const CustomerReviews: React.FC = () => {
       quote: '"We purchased paver block machinery for our commercial precast project, and the finish was excellent. Their service team was supportive and delivered exactly as promised."',
       colorBg: '#ECFDF5',
       colorBorder: '#10B981',
-      colorText: '#059669'
+      colorText: '#065F46'
     },
     {
       initials: 'SA',
@@ -178,7 +178,7 @@ export const CustomerReviews: React.FC = () => {
           <div style={{
             fontSize: '0.8rem',
             fontWeight: 800,
-            color: '#EA580C',
+            color: '#C2410C',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             marginBottom: '8px'

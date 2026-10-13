@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trophy, BarChart2, Headphones, CheckCircle2 } from 'lucide-react';
-import performanceMachineImg from '../assets/images/Machines/performance-machine.jpg';
+import performanceMachineImg from '../assets/images/Machines/performance-machine-opt.webp';
 
 export const PerformanceSection: React.FC = () => {
   const stats = [
@@ -88,7 +88,7 @@ export const PerformanceSection: React.FC = () => {
             <div>
               <div className="section-pill-dash-title" style={{ marginBottom: '14px' }}>
                 <h2 className="section-title" style={{ fontSize: 'clamp(1.75rem, 2.2vw, 2.2rem)', fontWeight: 900, color: '#00233D', margin: 0 }}>
-                  Built for <span className="text-orange" style={{ color: '#EA580C' }}>performance</span>
+                  Built for <span className="text-orange">performance</span>
                 </h2>
               </div>
 
@@ -127,7 +127,7 @@ export const PerformanceSection: React.FC = () => {
                       height: '20px', 
                       borderRadius: '50%', 
                       background: '#FFF7ED', 
-                      color: '#EA580C', 
+                      color: '#C2410C', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'center',
@@ -167,6 +167,9 @@ export const PerformanceSection: React.FC = () => {
                 src={performanceMachineImg} 
                 alt="Jupiter Industrial Automatic Concrete Block Machine" 
                 loading="lazy"
+                decoding="async"
+                width={400}
+                height={380}
                 style={{ 
                   width: '100%', 
                   height: '100%', 
@@ -202,7 +205,7 @@ export const PerformanceSection: React.FC = () => {
                     height: '46px',
                     borderRadius: '12px',
                     background: '#FFF7ED',
-                    color: '#EA580C',
+                    color: '#C2410C',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

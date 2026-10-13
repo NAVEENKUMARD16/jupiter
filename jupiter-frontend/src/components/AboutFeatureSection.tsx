@@ -1,7 +1,7 @@
 import React from 'react';
 import { Award, Building2, Users, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import flyashImg from '../assets/images/Machines/flyash.png';
+import flyashImg from '../assets/images/Machines/flyash-opt.webp';
 
 export const AboutFeatureSection: React.FC = () => {
   const stats = [
@@ -9,7 +9,7 @@ export const AboutFeatureSection: React.FC = () => {
       icon: Award,
       value: '35+',
       label: 'Years of Experience',
-      color: '#EA580C',
+      color: '#C2410C',
       bgColor: '#FFF7ED'
     },
     {
@@ -95,6 +95,10 @@ export const AboutFeatureSection: React.FC = () => {
             <img 
               src={flyashImg} 
               alt="Jupiter Industries Heavy Duty Block & Brick Machine" 
+              loading="lazy"
+              decoding="async"
+              width={400}
+              height={380}
               style={{ 
                 position: 'absolute',
                 top: 0,
@@ -112,7 +116,7 @@ export const AboutFeatureSection: React.FC = () => {
             <div style={{
               fontSize: '0.85rem',
               fontWeight: 600,
-              color: '#EA580C',
+              color: '#C2410C',
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               marginBottom: '12px'

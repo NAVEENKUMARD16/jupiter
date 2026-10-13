@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight, TrendingUp, ShieldCheck, Users, ChevronLeft, ChevronRight, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import flyashMachine from '../assets/images/Machines/flyash.png';
-import heroBanner1 from '../assets/images/hero-banner1.png';
+import flyashMachine from '../assets/images/Machines/flyash-opt.jpg';
+import heroBanner1 from '../assets/images/hero-banner1-opt.jpg';
 
 interface TestimonialItem {
   id: string;
@@ -93,7 +93,7 @@ export const SuccessStory: React.FC = () => {
           <div className="success-story-grid" style={{ gap: '48px', alignItems: 'center' }}>
             {/* Left Narrative Column */}
             <div className="success-story-left-col">
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#FFF7ED', color: '#EA580C', padding: '6px 14px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.08em', marginBottom: '16px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#FFF7ED', color: '#C2410C', padding: '6px 14px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.08em', marginBottom: '16px' }}>
                 <Settings size={14} className="spin-slow" />
                 <span>{current.badge}</span>
               </div>
@@ -118,7 +118,7 @@ export const SuccessStory: React.FC = () => {
                 gap: '10px'
               }}>
                 <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#00233D' }}>
-                  ⚙️ Machine Deployed: <span style={{ color: '#EA580C' }}>{current.machineTitle}</span>
+                  ⚙️ Machine Deployed: <span style={{ color: '#C2410C' }}>{current.machineTitle}</span>
                 </span>
               </div>
 
@@ -168,6 +168,10 @@ export const SuccessStory: React.FC = () => {
                 <img 
                   src={current.machineImage} 
                   alt={current.machineTitle}
+                  loading="lazy"
+                  decoding="async"
+                  width={400}
+                  height={240}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <div style={{
@@ -201,7 +205,7 @@ export const SuccessStory: React.FC = () => {
                   {current.quote}
                 </p>
                 
-                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#EA580C', marginBottom: '20px' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#C2410C', marginBottom: '20px' }}>
                   – {current.author} ({current.location})
                 </div>
 

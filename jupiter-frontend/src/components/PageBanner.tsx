@@ -12,14 +12,17 @@ interface PageBannerProps {
   breadcrumbs?: BreadcrumbItem[];
   subtitle?: string;
   eyebrow?: string;
+  titleAs?: 'h1' | 'h2' | 'div';
 }
 
 export const PageBanner: React.FC<PageBannerProps> = ({
   title,
   breadcrumbs = [],
   subtitle,
-  eyebrow
+  eyebrow,
+  titleAs = 'h1'
 }) => {
+  const TitleTag = titleAs;
   return (
     <section className="page-banner-header">
       <div className="container">
@@ -40,7 +43,7 @@ export const PageBanner: React.FC<PageBannerProps> = ({
           </div>
         )}
 
-        <h1 className="page-banner-title">{title}</h1>
+        <TitleTag className="page-banner-title">{title}</TitleTag>
 
         {/* Rounded Pill Breadcrumb (e.g. Home > About Us) */}
         <div className="banner-breadcrumb-pill">

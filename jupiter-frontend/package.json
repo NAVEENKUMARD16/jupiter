@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "pagespeed": "node scripts/run-pagespeed.cjs"
+    "pagespeed": "node scripts/run-pagespeed.cjs",
+    "optimize:images": "node scripts/optimize-images.cjs"
   },
   "dependencies": {
     "axios": "^1.7.9",
@@ -22,6 +23,7 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
+    "sharp": "^0.35.5",
     "typescript": "^5.7.3",
     "vite": "^6.1.0"
   }

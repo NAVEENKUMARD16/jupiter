@@ -10,9 +10,9 @@ export const IndustriesWeServe: React.FC = () => {
       tag: 'Fly Ash & Solid Blocks',
       desc: 'Supplying high-strength fly ash bricks and hollow concrete blocks for residential, commercial, and industrial structures.',
       icon: Building2,
-      image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=480&q=75',
       stat: '500+ Projects',
-      color: '#EA580C'
+      color: '#C2410C'
     },
     {
       id: 'infrastructure-highways',
@@ -20,7 +20,7 @@ export const IndustriesWeServe: React.FC = () => {
       tag: 'Kerb Stones & Channels',
       desc: 'Heavy-duty concrete kerb stones, culverts, and sustainable fly ash utilization for national highways & smart city projects.',
       icon: HardHat,
-      image: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=480&q=75',
       stat: 'Pan-India Delivery',
       color: '#0284C7'
     },
@@ -30,7 +30,7 @@ export const IndustriesWeServe: React.FC = () => {
       tag: 'Custom Mould Precision',
       desc: 'Precision precast concrete elements, boundary wall slabs, and high-tonnage structural blocks with zero micro-cracks.',
       icon: Layers,
-      image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=480&q=75',
       stat: 'M40 Grade Strength',
       color: '#16A34A'
     },
@@ -40,7 +40,7 @@ export const IndustriesWeServe: React.FC = () => {
       tag: 'Paver & Interlocking Tiles',
       desc: 'Vibrant interlocking paver blocks, grass pavers, and pathway tiles for IT parks, shopping malls, and housing townships.',
       icon: Building,
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=480&q=75',
       stat: '250k+ Cycles/Mould',
       color: '#7C3AED'
     },
@@ -72,7 +72,7 @@ export const IndustriesWeServe: React.FC = () => {
               <div key={ind.id} className="industry-card-item">
                 {/* Image Container with Badge */}
                 <div className="industry-card-img">
-                  <img src={ind.image} alt={ind.title} loading="lazy" />
+                  <img src={ind.image} alt={ind.title} loading="lazy" decoding="async" width={380} height={200} />
                   <div className="industry-badge-chip">
                     <IconComp size={14} style={{ color: '#EA580C' }} />
                     <span>{ind.tag}</span>

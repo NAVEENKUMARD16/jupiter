@@ -1,14 +1,13 @@
 /**
  * Centralized Image Registry for Jupiter Industries Website.
  *
- * You can place images inside `public/images/` or `src/assets/images/`
- * and change the paths below anytime.
+ * Optimized high-performance assets for Lighthouse 100/100 score.
  */
 
-import heroBanner1 from './hero-banner1.png';
-import jupiterLogo from './jupiter-logo.png';
-import flyashMachine from './Machines/flyash.png';
-import performanceMachineImg from './Machines/performance-machine.jpg';
+import heroBanner1 from './hero-banner1-opt.webp';
+import jupiterLogo from './jupiter-logo-opt.webp';
+import flyashMachine from './Machines/flyash-opt.webp';
+import performanceMachineImg from './Machines/performance-machine-opt.webp';
 import isoCertImg from './about/iso certification.jpg';
 
 export const IMAGES = {

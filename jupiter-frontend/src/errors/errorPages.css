@@ -1,0 +1,820 @@
+/* ==========================================================================
+   JUPITER INDUSTRIES - PROFESSIONAL CUSTOM ERROR PAGES STYLES
+   Industrial engineering aesthetic with dark navy gradients, blueprint grids,
+   glowing amber/orange accents, animated SVG illustrations & telemetry panels.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. MAIN WRAPPER & BACKGROUND LAYERS
+   -------------------------------------------------------------------------- */
+.jupiter-error-page-wrapper {
+  position: relative;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  max-width: 100%;
+  background: radial-gradient(ellipse at 50% 15%, #002845 0%, #001526 55%, #000B14 100%);
+  color: #FFFFFF;
+  font-family: var(--font-main, 'Poppins', sans-serif);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(32px, 6vw, 72px) clamp(16px, 4vw, 32px);
+  box-sizing: border-box;
+}
+
+/* Blueprint Grid Layer */
+.jupiter-error-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0, 180, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 180, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ambient Radial Glow Lighting */
+.jupiter-error-ambient-glow {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(350px, 70vw, 850px);
+  height: clamp(350px, 70vw, 850px);
+  background: radial-gradient(circle, rgba(255, 146, 0, 0.12) 0%, rgba(10, 132, 255, 0.04) 45%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.jupiter-error-ambient-glow-secondary {
+  position: absolute;
+  bottom: -150px;
+  right: 10%;
+  width: clamp(300px, 50vw, 600px);
+  height: clamp(300px, 50vw, 600px);
+  background: radial-gradient(circle, rgba(10, 132, 255, 0.08) 0%, transparent 65%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   2. MAIN CONTENT CONTAINER & TWO-COLUMN GRID
+   -------------------------------------------------------------------------- */
+.jupiter-error-page-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   3. LEFT CONTENT COLUMN
+   -------------------------------------------------------------------------- */
+.jupiter-error-content-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 16px;
+}
+
+/* Breadcrumbs pill */
+.jupiter-error-breadcrumb-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #CBD5E1;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.jupiter-error-breadcrumb-pill a {
+  color: #94A3B8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+}
+
+.jupiter-error-breadcrumb-pill a:hover {
+  color: #FF9200;
+}
+
+.jupiter-error-breadcrumb-separator {
+  color: #64748B;
+}
+
+.jupiter-error-breadcrumb-current {
+  color: #FF9200;
+  font-weight: 700;
+}
+
+/* Status Badge */
+.jupiter-error-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 16px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 146, 0, 0.12);
+  border: 1px solid rgba(255, 146, 0, 0.35);
+  color: #FF9200;
+  box-shadow: 0 0 20px rgba(255, 146, 0, 0.15);
+}
+
+.jupiter-error-badge.badge-danger {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #F87171;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+.jupiter-error-badge.badge-warning {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #FBBF24;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
+}
+
+.jupiter-error-badge.badge-info {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: rgba(14, 165, 233, 0.35);
+  color: #38BDF8;
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+}
+
+/* Status pulsing dot */
+.jupiter-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: jupiter-pulse-glow 2s infinite ease-in-out;
+}
+
+/* Giant Stylized Numeric Code Headline */
+.jupiter-error-code-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.jupiter-error-code-text {
+  font-size: clamp(4.5rem, 9vw, 7.5rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #FFFFFF 20%, #CBD5E1 55%, #FF9200 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  user-select: none;
+}
+
+.jupiter-error-code-subtag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+/* Title & Subtitle */
+.jupiter-error-title {
+  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.jupiter-error-subtitle {
+  font-size: clamp(0.95rem, 1.8vw, 1.12rem);
+  color: #94A3B8;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 580px;
+}
+
+.jupiter-error-desc-extra {
+  font-size: 0.9rem;
+  color: #64748B;
+  line-height: 1.6;
+  margin-top: -6px;
+}
+
+/* --------------------------------------------------------------------------
+   4. ACTION BUTTONS CLUSTER
+   -------------------------------------------------------------------------- */
+.jupiter-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+/* Primary Button (Jupiter Amber/Orange with High Contrast Dark Navy Text) */
+.jupiter-btn-error-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #FF9200 0%, #E08200 100%);
+  color: #001827 !important;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 13px 26px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(255, 146, 0, 0.35);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 48px;
+}
+
+.jupiter-btn-error-primary:hover {
+  background: linear-gradient(135deg, #FFA726 0%, #FF9200 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(255, 146, 0, 0.45);
+  color: #00121F !important;
+}
+
+.jupiter-btn-error-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button (Glass Navy / Outline) */
+.jupiter-btn-error-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 13px 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+  min-height: 48px;
+}
+
+.jupiter-btn-error-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 146, 0, 0.5);
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+}
+
+.jupiter-btn-error-secondary:active {
+  transform: translateY(0);
+}
+
+/* Retry Button */
+.jupiter-btn-error-retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: rgba(14, 165, 233, 0.12);
+  color: #38BDF8 !important;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 13px 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  min-height: 48px;
+}
+
+.jupiter-btn-error-retry:hover {
+  background: rgba(14, 165, 233, 0.22);
+  border-color: rgba(14, 165, 233, 0.6);
+  color: #7DD3FC !important;
+  transform: translateY(-2px);
+}
+
+.jupiter-btn-error-retry:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. QUICK NAV LINKS / SUGGESTION CARDS
+   -------------------------------------------------------------------------- */
+.jupiter-error-quick-links-section {
+  margin-top: 18px;
+  width: 100%;
+}
+
+.jupiter-error-quick-links-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-bottom: 10px;
+}
+
+.jupiter-error-quick-links-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.jupiter-error-quick-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  color: #CBD5E1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.jupiter-error-quick-link-pill:hover {
+  background: rgba(255, 146, 0, 0.1);
+  border-color: rgba(255, 146, 0, 0.3);
+  color: #FF9200;
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   6. RIGHT VISUAL & TELEMETRY COLUMN
+   -------------------------------------------------------------------------- */
+.jupiter-error-visual-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Premium Card Wrapper */
+.jupiter-error-visual-card {
+  background: rgba(5, 15, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: clamp(20px, 3.5vw, 32px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Glow Corner Accent */
+.jupiter-error-visual-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(255, 146, 0, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Illustration Canvas Box */
+.jupiter-error-illustration-box {
+  width: 100%;
+  max-width: 380px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.jupiter-error-illustration-box svg {
+  width: 100%;
+  height: 100%;
+  max-height: 260px;
+  overflow: visible;
+}
+
+/* Telemetry Diagnostics Panel */
+.jupiter-error-telemetry-box {
+  width: 100%;
+  margin-top: 18px;
+  background: rgba(0, 8, 16, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 16px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  box-sizing: border-box;
+}
+
+.jupiter-telemetry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #64748B;
+  text-transform: uppercase;
+}
+
+.jupiter-telemetry-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #FF9200;
+}
+
+.jupiter-telemetry-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.jupiter-telemetry-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  gap: 12px;
+}
+
+.jupiter-telemetry-row .tel-label {
+  color: #64748B;
+  white-space: nowrap;
+}
+
+.jupiter-telemetry-row .tel-value {
+  color: #CBD5E1;
+  text-align: right;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.jupiter-telemetry-row .tel-value.value-highlight {
+  color: #FF9200;
+}
+
+.jupiter-telemetry-row .tel-value.value-error {
+  color: #F87171;
+}
+
+.jupiter-telemetry-row .tel-value.value-success {
+  color: #4ADE80;
+}
+
+/* Collapsible technical details */
+.jupiter-error-tech-details {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.jupiter-error-tech-details summary {
+  cursor: pointer;
+  font-size: 0.74rem;
+  color: #94A3B8;
+  font-family: inherit;
+  outline: none;
+  user-select: none;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.jupiter-error-tech-details summary:hover {
+  color: #FF9200;
+}
+
+.jupiter-error-tech-stack {
+  margin-top: 8px;
+  background: #02070D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px;
+  color: #94A3B8;
+  font-size: 0.7rem;
+  max-height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Machine Factory Watermark */
+.jupiter-error-watermark {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 12px;
+  padding: 0 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   7. IN-CARD / COMPONENT-LEVEL API ERROR FALLBACK
+   -------------------------------------------------------------------------- */
+.jupiter-api-error-card {
+  width: 100%;
+  background: rgba(5, 15, 26, 0.9);
+  border: 1px solid rgba(255, 146, 0, 0.3);
+  border-radius: 16px;
+  padding: 32px 24px;
+  color: #FFFFFF;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  margin: 20px 0;
+}
+
+.jupiter-api-error-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 146, 0, 0.12);
+  border: 1px solid rgba(255, 146, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF9200;
+}
+
+.jupiter-api-error-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.jupiter-api-error-msg {
+  font-size: 0.92rem;
+  color: #94A3B8;
+  max-width: 480px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   8. KEYFRAME ANIMATIONS
+   -------------------------------------------------------------------------- */
+@keyframes jupiter-pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes jupiter-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes jupiter-spin-reverse-slow {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes jupiter-radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes jupiter-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes jupiter-scanline {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(180%);
+    opacity: 0;
+  }
+}
+
+@keyframes jupiter-laser-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    stroke-width: 1.5;
+  }
+  50% {
+    opacity: 1;
+    stroke-width: 3;
+  }
+}
+
+.anim-spin-slow {
+  animation: jupiter-spin-slow 22s linear infinite;
+  transform-origin: center;
+}
+
+.anim-spin-reverse-slow {
+  animation: jupiter-spin-reverse-slow 16s linear infinite;
+  transform-origin: center;
+}
+
+.anim-gear-fast {
+  animation: jupiter-spin-slow 6s linear infinite;
+  transform-origin: center;
+}
+
+.anim-gear-counter {
+  animation: jupiter-spin-reverse-slow 6s linear infinite;
+  transform-origin: center;
+}
+
+.anim-radar-sweep {
+  animation: jupiter-radar-sweep 4s linear infinite;
+  transform-origin: 150px 150px;
+}
+
+.anim-float {
+  animation: jupiter-float 4s ease-in-out infinite;
+}
+
+.anim-scanline {
+  animation: jupiter-scanline 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.anim-laser {
+  animation: jupiter-laser-pulse 1.8s ease-in-out infinite;
+}
+
+/* --------------------------------------------------------------------------
+   9. RESPONSIVE DESIGN (TABLETS & MOBILE)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .jupiter-error-page-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .jupiter-error-content-col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .jupiter-error-subtitle {
+    max-width: 650px;
+  }
+
+  .jupiter-error-actions {
+    justify-content: center;
+  }
+
+  .jupiter-error-quick-links-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .jupiter-error-quick-links-grid {
+    justify-content: center;
+  }
+
+  .jupiter-error-visual-card {
+    max-width: 580px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .jupiter-error-page-wrapper {
+    padding: 32px 14px 48px;
+  }
+
+  .jupiter-error-code-text {
+    font-size: 4.6rem;
+  }
+
+  .jupiter-error-title {
+    font-size: 1.75rem;
+  }
+
+  .jupiter-error-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .jupiter-error-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .jupiter-btn-error-primary,
+  .jupiter-btn-error-secondary,
+  .jupiter-btn-error-retry {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .jupiter-error-illustration-box {
+    height: 210px;
+    max-width: 280px;
+  }
+
+  .jupiter-telemetry-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .jupiter-telemetry-row .tel-value {
+    text-align: left;
+  }
+
+  .jupiter-error-quick-links-grid {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .jupiter-error-quick-link-pill {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}

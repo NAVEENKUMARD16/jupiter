@@ -199,6 +199,10 @@ export const ProjectsPage: React.FC = () => {
                       <img
                         src={vid.image}
                         alt={vid.title}
+                        loading="lazy"
+                        decoding="async"
+                        width={360}
+                        height={200}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
                       />
 
@@ -327,7 +331,14 @@ export const ProjectsPage: React.FC = () => {
                       className="gallery-photo-card"
                       onClick={() => setSelectedPhoto(photo)}
                     >
-                      <img src={photo.image} alt={photo.title} />
+                      <img 
+                        src={photo.image} 
+                        alt={photo.title} 
+                        loading="lazy" 
+                        decoding="async" 
+                        width={360} 
+                        height={240} 
+                      />
 
                       {/* Category Tag */}
                       <span style={{
@@ -442,6 +453,7 @@ export const ProjectsPage: React.FC = () => {
               </div>
               <button
                 className="modal-close-btn"
+                aria-label="Close video player"
                 style={{ color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                 onClick={() => setSelectedVideo(null)}
               >
@@ -522,10 +534,13 @@ export const ProjectsPage: React.FC = () => {
               <img
                 src={selectedPhoto.image}
                 alt={selectedPhoto.title}
+                loading="lazy"
+                decoding="async"
                 style={{ width: '100%', maxHeight: '500px', objectFit: 'contain', display: 'block' }}
               />
               <button
                 className="modal-close-btn"
+                aria-label="Close photo preview"
                 style={{ position: 'absolute', top: '16px', right: '16px', color: '#FFFFFF', background: 'rgba(0,0,0,0.7)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                 onClick={() => setSelectedPhoto(null)}
               >

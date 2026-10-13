@@ -43,7 +43,7 @@ export const WhyChooseUs: React.FC = () => {
           <div style={{
             fontSize: '0.78rem',
             fontWeight: 800,
-            color: '#EA580C',
+            color: '#C2410C',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             marginBottom: '8px'

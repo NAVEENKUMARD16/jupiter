@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { ArrowRight, Play, Settings, BarChart3, MapPin, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { IMAGES } from '../assets/images/images';
 
 interface HeroProps {
   onOpenVideoModal?: (videoUrl: string, title?: string) => void;
 }
 
-const DEFAULT_HERO_IMAGE = IMAGES.heroBanner;
-
 export const Hero: React.FC<HeroProps> = ({ onOpenVideoModal }) => {
-  const [imgSrc] = useState(DEFAULT_HERO_IMAGE);
   const [selfModalOpen, setSelfModalOpen] = useState(false);
 
   const handleWatchStory = () => {
@@ -22,13 +18,56 @@ export const Hero: React.FC<HeroProps> = ({ onOpenVideoModal }) => {
   };
 
   return (
-    <section 
-      className="hero-section"
-      style={{
-        backgroundImage: `linear-gradient(90deg, rgba(0, 24, 39, 0.95) 0%, rgba(0, 24, 39, 0.85) 38%, rgba(0, 24, 39, 0.4) 62%, rgba(0, 24, 39, 0.1) 82%, transparent 100%), url(${imgSrc})`
-      }}
-    >
-      <div className="container hero-container-custom">
+    <section className="hero-section">
+      {/* High-Performance LCP Discovery Image with Responsive WebP Sources */}
+      <picture
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }}
+      >
+        <source media="(max-width: 768px)" srcSet="/images/hero-banner-mobile.webp" type="image/webp" />
+        <source media="(min-width: 769px)" srcSet="/images/hero-banner-desktop.webp" type="image/webp" />
+        <source media="(max-width: 768px)" srcSet="/images/hero-banner-mobile.jpg" type="image/jpeg" />
+        <img
+          src="/images/hero-banner-desktop.jpg"
+          alt="Jupiter Industries Industrial Machinery Plant"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          width={1400}
+          height={787}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center right',
+            pointerEvents: 'none'
+          }}
+        />
+      </picture>
+      {/* Dark Navy Brand Gradient Protection Overlay */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(90deg, rgba(0, 24, 39, 0.95) 0%, rgba(0, 24, 39, 0.85) 38%, rgba(0, 24, 39, 0.4) 62%, rgba(0, 24, 39, 0.1) 82%, rgba(0, 24, 39, 0.25) 100%)',
+          zIndex: 1,
+          pointerEvents: 'none'
+        }}
+      />
+      <div className="container hero-container-custom" style={{ position: 'relative', zIndex: 2 }}>
         <div className="hero-grid-layout">
           {/* Left Text Content Overlay */}
           <div className="hero-text-column">

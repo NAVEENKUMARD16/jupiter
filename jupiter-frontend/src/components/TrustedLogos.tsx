@@ -27,7 +27,7 @@ export const TrustedLogos: React.FC = () => {
         <span style={{ 
           fontSize: '0.72rem', 
           fontWeight: 800, 
-          color: '#EA580C', 
+          color: '#C2410C', 
           letterSpacing: '0.12em', 
           textTransform: 'uppercase' 
         }}>
@@ -105,7 +105,7 @@ export const TrustedLogos: React.FC = () => {
                   <IconComp size={13} />
                 </div>
                 <span style={{ color: '#00233D' }}>{item.title}</span>
-                <span style={{ color: '#EA580C', fontWeight: 800, fontSize: '0.85rem' }}>→</span>
+                <span style={{ color: '#C2410C', fontWeight: 800, fontSize: '0.85rem' }}>→</span>
               </Link>
             );
           })}

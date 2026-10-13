@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
     <header className={`navbar-wrapper ${isScrolled ? 'scrolled' : 'transparent-hero'}`}>
       <div className="container navbar-container">
         {/* Brand Logo */}
-        <Link to="/" className="brand-logo-group" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+        <Link to="/" className="brand-logo-group" aria-label="Jupiter Industries Home" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           <div style={{
             background: '#FFFFFF',
             borderRadius: '10px',
@@ -99,7 +99,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           }}>
             <img 
               src={IMAGES.logo} 
-              alt="Jupiter Industries" 
+              alt="Jupiter Industries Logo" 
+              width={200}
+              height={40}
               style={{ 
                 height: '40px', 
                 width: 'auto', 
@@ -226,12 +228,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
         {/* Right CTA / Contact Group */}
         <div className="nav-actions-group">
-          <a href="tel:+919159999060" className="nav-phone-contact">
+          <a href="tel:+919159999060" className="nav-phone-contact" aria-label="Call Jupiter Industries at +91 91599 99060">
             <Phone size={16} className="text-orange" />
             <span>+91 91599 99060</span>
           </a>
 
-          <button onClick={handleScrollToQuote} className="btn btn-orange">
+          <button onClick={handleScrollToQuote} className="btn btn-orange" aria-label="Request Machinery Quote">
             <span>Request Quote</span>
             <ArrowRight size={16} />
           </button>
@@ -240,7 +242,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           <button 
             className="nav-hamburger-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation menu"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>

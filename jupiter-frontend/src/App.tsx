@@ -4,19 +4,25 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { WhatsAppButton } from './components/WhatsAppButton';
 import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
-import { ProductsPage } from './pages/ProductsPage';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { ContactPage } from './pages/ContactPage';
-import { BlogPage } from './pages/BlogPage';
-import { NotFoundPage } from './pages/NotFoundPage';
+const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const ProductsPage = lazy(() => import('./pages/ProductsPage').then(m => ({ default: m.ProductsPage })));
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then(m => ({ default: m.ProjectsPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const BlogPage = lazy(() => import('./pages/BlogPage').then(m => ({ default: m.BlogPage })));
+import { 
+  UnauthorizedPage, 
+  ForbiddenPage, 
+  NotFoundPage, 
+  InternalServerErrorPage, 
+  ServiceUnavailablePage 
+} from './errors';
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
-import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
-import { ResetPasswordPage } from './pages/ResetPasswordPage';
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
 const MachineCategoryPage = lazy(() => import('./pages/MachineCategoryPage').then(m => ({ default: m.MachineCategoryPage })));
-import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
-import { TermsConditionsPage } from './pages/TermsConditionsPage';
-import { SitemapPage } from './pages/SitemapPage';
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })));
+const TermsConditionsPage = lazy(() => import('./pages/TermsConditionsPage').then(m => ({ default: m.TermsConditionsPage })));
+const SitemapPage = lazy(() => import('./pages/SitemapPage').then(m => ({ default: m.SitemapPage })));
 import { EnquiryForm } from './components/EnquiryForm';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { MaintenancePage } from './components/MaintenancePage';
@@ -114,7 +120,8 @@ const AppContent: React.FC = () => {
       <Navbar onOpenQuoteModal={() => setIsQuoteModalOpen(true)} />
 
       {/* Dynamic Page Router */}
-      <Suspense fallback={<div style={{ padding: '80px 24px', textAlign: 'center', color: '#00233D', fontWeight: 600 }}>Loading...</div>}>
+      <ErrorBoundary fallbackTitle="Jupiter Application Encountered an Error">
+        <Suspense fallback={<div style={{ padding: '80px 24px', textAlign: 'center', color: '#00233D', fontWeight: 600 }}>Loading...</div>}>
         <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
@@ -157,10 +164,22 @@ const AppContent: React.FC = () => {
         <Route path="/terms" element={<Navigate to="/terms-and-conditions" replace />} />
         <Route path="/sitemap" element={<SitemapPage />} />
 
+        {/* Professional Custom Error Pages & Status Code Aliases */}
+        <Route path="/401" element={<UnauthorizedPage />} />
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route path="/403" element={<ForbiddenPage />} />
+        <Route path="/forbidden" element={<ForbiddenPage />} />
+        <Route path="/access-denied" element={<Navigate to="/403" replace />} />
         <Route path="/404" element={<NotFoundPage />} />
+        <Route path="/500" element={<InternalServerErrorPage />} />
+        <Route path="/error" element={<InternalServerErrorPage />} />
+        <Route path="/server-error" element={<InternalServerErrorPage />} />
+        <Route path="/503" element={<ServiceUnavailablePage />} />
+        <Route path="/service-unavailable" element={<ServiceUnavailablePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </Suspense>
+      </ErrorBoundary>
 
       {/* Master Footer */}
       <Footer />
@@ -171,9 +190,9 @@ const AppContent: React.FC = () => {
       {/* Global Quote Request Modal */}
       {isQuoteModalOpen && (
         <div className="modal-backdrop-overlay" onClick={() => setIsQuoteModalOpen(false)}>
-          <div className="modal-content-card" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content-card" role="dialog" aria-modal="true" aria-labelledby="global-quote-modal-title" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-bar">
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Request Machinery Quotation</h3>
+              <h3 id="global-quote-modal-title" style={{ fontSize: '1.2rem', fontWeight: 700 }}>Request Machinery Quotation</h3>
               <button
                 className="modal-close-btn"
                 onClick={() => setIsQuoteModalOpen(false)}

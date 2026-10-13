@@ -50,7 +50,7 @@ Options +FollowSymLinks
   AddOutputFilterByType DEFLATE font/woff2
 </IfModule>
 
-# 5. BROWSER CACHING HEADERS
+# 5. BROWSER CACHING HEADERS (Expires + Direct Cache-Control Headers)
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 month"
@@ -84,14 +84,19 @@ Options +FollowSymLinks
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
-# Ensure index.html is never aggressively cached by proxy/browser
-<FilesMatch "index\.html$">
-  <IfModule mod_headers.c>
+<IfModule mod_headers.c>
+  # 1-Year Immutable Caching for Fingerprinted Assets, Images, and Fonts (Lighthouse 100)
+  <FilesMatch "\.(css|js|webp|png|jpg|jpeg|gif|ico|svg|woff2|woff|ttf|mp4|webm)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # HTML & Dynamic Manifests - Revalidate Immediately
+  <FilesMatch "\.(html|htm|json)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
-    Header set Expires 0
-  </IfModule>
-</FilesMatch>
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
 
 # 6. SECURITY HEADERS
 <IfModule mod_headers.c>

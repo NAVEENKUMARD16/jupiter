@@ -116,6 +116,9 @@ export const HomePage: React.FC = () => {
         <div className="modal-backdrop-overlay" onClick={handleCloseVideo} style={{ zIndex: 99999 }}>
           <div 
             className="modal-content-card" 
+            role="dialog"
+            aria-modal="true"
+            aria-label={videoModal.title || 'Machinery Video Player'}
             style={{ maxWidth: '860px', width: '100%', background: '#001827', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7)' }} 
             onClick={(e) => e.stopPropagation()}
           >

@@ -101,13 +101,17 @@ export const PhoneInputWithCountry: React.FC<PhoneInputWithCountryProps> = ({
           className="country-display-pill-btn"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
+          aria-label={`Select country code, currently ${currentCountry.name} (${currentCountry.dial_code})`}
           title={`Country: ${currentCountry.name} (${currentCountry.dial_code})`}
         >
           <img
             src={`https://flagcdn.com/w40/${currentCountry.code.toLowerCase()}.png`}
             alt={currentCountry.name}
             className="country-flag-img"
-            loading="eager"
+            loading="lazy"
+            decoding="async"
+            width={20}
+            height={15}
             onError={(e) => {
               (e.target as HTMLElement).style.display = 'none';
             }}
@@ -146,6 +150,9 @@ export const PhoneInputWithCountry: React.FC<PhoneInputWithCountryProps> = ({
                       alt={c.name}
                       className="country-option-flag"
                       loading="lazy"
+                      decoding="async"
+                      width={20}
+                      height={15}
                       onError={(e) => {
                         (e.target as HTMLElement).style.display = 'none';
                       }}

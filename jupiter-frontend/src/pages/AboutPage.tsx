@@ -18,8 +18,8 @@ import {
 import { Link } from 'react-router-dom';
 import { PageBanner } from '../components/PageBanner';
 import isoCertificationImg from '../assets/images/about/iso certification.jpg';
-import missionImg from '../assets/images/about/mission.png';
-import about1FacilityImg from '../assets/images/about/about1.jpeg';
+import missionImg from '../assets/images/about/mission-opt.jpg';
+import about1FacilityImg from '../assets/images/about/about1-opt.jpg';
 
 export const AboutPage: React.FC = () => {
   useSeoMeta({
@@ -316,6 +316,10 @@ export const AboutPage: React.FC = () => {
               <img
                 src={isoCertificationImg}
                 alt="Jupiter Industries ISO 9001:2015 Certificate"
+                loading="lazy"
+                decoding="async"
+                width={328}
+                height={460}
                 style={{ width: '100%', height: 'auto', display: 'block' }}
               />
             </div>
@@ -341,6 +345,8 @@ export const AboutPage: React.FC = () => {
                 <img
                   src={isoCertificationImg}
                   alt="ISO Certificate Full Resolution"
+                  loading="lazy"
+                  decoding="async"
                   style={{ maxWidth: '100%', maxHeight: '75vh', height: 'auto', borderRadius: '6px', border: '1px solid #334155' }}
                 />
               </div>

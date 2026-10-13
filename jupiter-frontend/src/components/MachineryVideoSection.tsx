@@ -85,7 +85,15 @@ export const MachineryVideoSection: React.FC<MachineryVideoSectionProps> = () =>
                   justifyContent: 'flex-end' 
                 }}
               >
-                <img src={currentVideo?.image || (currentVideo as any)?.thumbnail} alt={currentVideo?.title} />
+                <img 
+                  src={currentVideo?.image || (currentVideo as any)?.thumbnail} 
+                  alt={currentVideo?.title || 'Jupiter Machinery in action'}
+                  loading="lazy"
+                  decoding="async"
+                  width={800}
+                  height={450}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
                 
                 <button className="video-play-center-btn" aria-label="Play video">
                   <Play size={28} fill="white" style={{ marginLeft: '4px' }} />
@@ -110,7 +118,16 @@ export const MachineryVideoSection: React.FC<MachineryVideoSectionProps> = () =>
               return (
                 <div 
                   key={vid.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Select video: ${vid.title}`}
                   onClick={() => handleSelectVideo(idx)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleSelectVideo(idx);
+                    }
+                  }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -126,7 +143,15 @@ export const MachineryVideoSection: React.FC<MachineryVideoSectionProps> = () =>
                   }}
                 >
                   <div className="playlist-thumb-box" style={{ width: '95px', height: '65px', borderRadius: '10px', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
-                    <img src={vid.image || (vid as any).thumbnail} alt={vid.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img 
+                      src={vid.image || (vid as any).thumbnail} 
+                      alt={vid.title} 
+                      loading="lazy"
+                      decoding="async"
+                      width={95}
+                      height={65}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
                     <div className="playlist-mini-play" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(0, 35, 61, 0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Play size={12} fill="white" />
                     </div>
@@ -136,7 +161,7 @@ export const MachineryVideoSection: React.FC<MachineryVideoSectionProps> = () =>
                     <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#00233D', marginBottom: '4px', lineHeight: 1.3 }}>
                       {vid.title}
                     </div>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#EA580C' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#C2410C' }}>
                       ▶ Watch Now
                     </div>
                   </div>

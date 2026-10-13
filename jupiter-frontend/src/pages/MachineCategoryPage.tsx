@@ -525,6 +525,7 @@ export const MachineCategoryPage: React.FC = () => {
       {/* 1. Header Page Banner with Breadcrumb */}
       <PageBanner
         title={isSparesCategory ? 'Machine Spares & Precision Tooling' : (activeMachine?.name || categoryData.name)}
+        titleAs={!isSparesCategory && activeMachine ? 'div' : 'h1'}
         breadcrumbs={[
           { label: 'Products', link: '/products' },
           { label: categoryData.name }
